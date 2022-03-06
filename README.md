@@ -53,8 +53,7 @@ AVE
 ### Train the model
 
 Before training, you should new a directory named **`model`** to save checkpoint file. 
-```python train_amd.py
-```
+```python train_amd.py```
 You can change related settings in file ```train_amd.py```.
 &nbsp;
 
@@ -62,11 +61,9 @@ You can change related settings in file ```train_amd.py```.
 ### Test and Eval
 
 You can test the performance of trained model by simply running
-```python test.py
-```
+```python test.py```
 And you can also learn more information(mAP, and so on) by running
-```python eval.py
-```
+```python eval.py```
 
 
 ### Contact us
