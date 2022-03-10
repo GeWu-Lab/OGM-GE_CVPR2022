@@ -1,5 +1,5 @@
 # OGM-GE implemented in PyTorch
-**Paper's Name: "Balanced Multi-modal Learning via On-the-fly Gradient Modulation"
+**Paper's Name: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"
 Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(2022), ID 6810.
 The link of ready paper will be released soon**
 
