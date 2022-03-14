@@ -14,6 +14,8 @@ models that including vanilla audio_visual models;
 tempresult to save more temporary result, 
 and we also provid training, testing, and tools to evaluate more performance index.
 
+![contents](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/demo/pipeline.pdf)
+
 
 ## Main Training Environment
 + Ubuntu 16.04
