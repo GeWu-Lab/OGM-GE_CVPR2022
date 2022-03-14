@@ -16,6 +16,8 @@ and we also provid training, testing, and tools to evaluate more performance ind
 
 ![contents](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/demo/pipeline.pdf)
 
+![Teaser image](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/demo/pipeline.pdf)
+
 
 ## Main Training Environment
 + Ubuntu 16.04
