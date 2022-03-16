@@ -1,23 +1,23 @@
 # OGM-GE implemented in PyTorch
-**Paper's Name: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"
-Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(2022), ID 6810.
-The link of ready paper will be released soon**
+**Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"
+Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)
+The link of paper will be released soon**
 
 
 ## Method Introduction
-Here is the code example of OGM-GE training strategy, which is a easy way to apply to different vanilla audio_visual fusion networks or other audio_visual networks, helping to achieve a more balanced and adequate training. More analysis and details can be seen in the paper.
+Here is the code example of OGM-GE training strategy, which is a easy way to apply to different vanilla multimodal fusion networks or other multimodal networks, helping to achieve a more balanced and adequate training. More analysis and details can be seen in the paper.
 
-This code includes four dirs: 
-data to store data of database; 
-dataloader that including three dataloaders(audi_visual,audio,visual); 
-models that including vanilla audio_visual models; 
-tempresult to save more temporary result, 
-and we also provid training, testing, and tools to evaluate more performance index.
+This code includes four main dirs: 
+'data to store data of database; 
+'dataloader' that including three dataloaders(audi_visual,audio,visual); 
+'models' that including vanilla audio_visual models; 
+'tempresult' to save more temporary result, 
+and we also provid pre-processing, training, testing, and tools in addition.
 
 ![Method Pipeline](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/demo/pipeline.pdf)
 
 
-## Main Training Environment
+## Dependencies
 + Ubuntu 16.04
 + CUDA Version: 11.1
 + PyTorch 1.8.1
@@ -66,6 +66,13 @@ You can test the performance of trained model by simply running
 ```python test.py```
 And you can also learn more information(mAP, and so on) by running
 ```python eval.py```
+
+
+### Citations
+The citation of our paper will be released soon.
+
+### References
+
 
 
 ### Contact us
