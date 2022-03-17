@@ -38,7 +38,7 @@ Original Dataset：
 
 ### Pre-processing
 
-For example, we provide code to pre-process videos into RGB streams at different frame rates and audio wav files. By running python files with ```'python preprocess_audio.py'``` and ```'python video2frame-1fps.py'```. The only thing you need to change is the data or other file addresses.
+For example, we provide code to pre-process videos into RGB streams at different frame rates and audio wav files in the file ```'tools'```. By running python files with ```'python preprocess_audio.py'``` and ```'python video2frame-1fps.py'```. The only thing you need to change is the data or other file addresses.
 
 You can also adjust the frame rates by changing the parameter in the ```'preprocess_audio.py'``` file, or the in the ```'video2frame-1fps.py'``` file.
 
