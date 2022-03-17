@@ -17,7 +17,7 @@ and we also provid pre-processing, training, testing, and tools in addition.
 ![Method Pipeline](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/demo/pipeline.pdf)
 
 
-## Dependencies
+## Main Dependencies
 + Ubuntu 16.04
 + CUDA Version: 11.1
 + PyTorch 1.8.1
@@ -26,18 +26,21 @@ and we also provid pre-processing, training, testing, and tools in addition.
 
 
 ## Data Preparation
-### Original data
-Original Dataset：[AVE](https://sites.google.com/view/audiovisualresearch)
+### Original dataset
+Original Dataset：
 [VGGSound](https://www.robots.ox.ac.uk/~vgg/data/vggsound/)
 [Kinetics-Sounds](https://github.com/cvdfoundation/kinetics-dataset)
 [CREMA-D](https://github.com/CheyneyComputerScience/CREMA-D)
+[AVE](https://sites.google.com/view/audiovisualresearch)
 [ESC50](https://github.com/karoldvl/ESC-50/archive/master.zip)
 
 
 
 ### Pre-processing
 
-For example, we provide code to pre-process videos into RGB frames and audio wav files. By running python files with ```'python preprocess_audio.py'``` and ```'python video2frame-1fps.py'``` (they can also process raw data into other settings). The only thing you need to change is the data or other file addresses.
+For example, we provide code to pre-process videos into RGB streams at different frame rates and audio wav files. By running python files with ```'python preprocess_audio.py'``` and ```'python video2frame-1fps.py'```. The only thing you need to change is the data or other file addresses.
+
+You can also adjust the frame rates by changing the parameter in the ```'preprocess_audio.py'``` file, or the in the ```'video2frame-1fps.py'``` file.
 
 
 After downloading and processing data, you should build the data dir  following proper structure. We give an example of AVE dataset:
