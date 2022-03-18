@@ -1,8 +1,12 @@
 # OGM-GE implemented in PyTorch
 **Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"
+
 Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)
 The link of paper will be released soon**
 
+<div  align="center">    
+<img src="demo/pipeline.pdf" width = "80%" />
+</div>
 
 ## Method Introduction
 Here is the code example of OGM-GE training strategy, which is a easy way to apply to different vanilla multimodal fusion networks or other multimodal networks, helping to achieve a more balanced and adequate training. More analysis and details can be seen in the paper.
