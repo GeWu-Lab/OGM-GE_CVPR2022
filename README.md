@@ -17,7 +17,7 @@ This code includes four main dirs:
 and we also provid pre-processing, training, testing, and tools in addition.
 
 <div  align="center">    
-<img src="demo/pipeline.png" width = "80%" />
+<img src="demo/pipeline.PNG" width = "80%" />
 </div>
 
 
