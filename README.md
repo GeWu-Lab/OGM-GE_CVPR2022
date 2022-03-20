@@ -4,9 +4,7 @@
 Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)
 The link of paper will be released soon**
 
-<div  align="center">    
-<img src="demo/pipeline.pdf" width = "80%" />
-</div>
+
 
 ## Method Introduction
 Here is the code example of OGM-GE training strategy, which is a easy way to apply to different vanilla multimodal fusion networks or other multimodal networks, helping to achieve a more balanced and adequate training. More analysis and details can be seen in the paper.
@@ -18,7 +16,9 @@ This code includes four main dirs:
 'tempresult' to save more temporary result, 
 and we also provid pre-processing, training, testing, and tools in addition.
 
-![Method Pipeline](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/demo/pipeline.pdf)
+<div  align="center">    
+<img src="demo/pipeline.png" width = "80%" />
+</div>
 
 
 ## Main Dependencies
