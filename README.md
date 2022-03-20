@@ -16,12 +16,15 @@ The link of paper will be released soon**
 
 
 ## What's the imbalance phenomenon in multimodal learning task?
+We observe that 
 <div  align="center">    
 <img src="demo/five lines.PNG" width = "80%" />
 </div>
 
 ## Method Introduction
-
+Pipeline of our OGM-GE method, consisting two steps:
+1. On-the-fly gradient modulation for different modalities.
+2. Adaptive Gaussion noise enhancement on gradient.
 <div  align="center">    
 <img src="demo/pipeline.PNG" width = "80%" />
 </div>
