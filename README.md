@@ -1,12 +1,5 @@
 # OGM-GE implemented in PyTorch
-**Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"
-Xiaokang Peng*, Yake Wei*, Andong Deng, Dong Wang, and Di Hu 
-Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)
-The link of paper will be released soon**
 
-
-
-## Method Introduction
 Here is the code example of OGM-GE training strategy, which is a easy way to apply to different vanilla multimodal fusion networks or other multimodal networks, helping to achieve a more balanced and adequate training. More analysis and details can be seen in the paper.
 
 This code includes four main dirs: 
@@ -15,6 +8,19 @@ This code includes four main dirs:
 'models' that including vanilla audio_visual models; 
 'tempresult' to save more temporary result, 
 and we also provid pre-processing, training, testing, and tools in addition.
+
+**Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"
+Xiaokang Peng*, Yake Wei*, Andong Deng, Dong Wang, and Di Hu 
+Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)
+The link of paper will be released soon**
+
+
+## What's the imbalance phenomenon in multimodal learning task?
+<div  align="center">    
+<img src="demo/five lines.PNG" width = "80%" />
+</div>
+
+## Method Introduction
 
 <div  align="center">    
 <img src="demo/pipeline.PNG" width = "80%" />
