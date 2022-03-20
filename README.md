@@ -1,6 +1,6 @@
 # OGM-GE implemented in PyTorch
 **Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"
-
+Xiaokang Peng*, Yake Wei*, Andong Deng, Dong Wang, and Di Hu 
 Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)
 The link of paper will be released soon**
 
