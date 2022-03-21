@@ -16,7 +16,7 @@ The link of paper will be released soon**
 
 
 ## What's the imbalance phenomenon in multimodal learning task?
-We observe that 
+We observe that potential of multimodal information is not fully exploited even when the multimodal model outperforms its uni-modal counterpart. We conduct linear probing experiments to explore the quality of jointly trained encoders, and find them under-optimized (the yellow line) compared with the uni-modal model (the red line). We proposed the OGM-GE method to improve the optimization process adaptively and achieved consistent improvement (the blue line). We improve both the multimodal performance and uni-model representation as shown in the figure.
 <div  align="center">    
 <img src="demo/five lines.PNG" width = "80%" />
 </div>
