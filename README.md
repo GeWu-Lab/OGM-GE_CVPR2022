@@ -83,10 +83,13 @@ import torch
 
     # Calculate original loss first.
     loss.backward()
+    
     # Calculation of discrepancy ration and k.
     k_a,k_v = calculate_coefficient(label, out_a, out_v)
+    
     # Gradient Modulation begins before optimization, and with GE applied.
     update_model_with_OGM_GE(model, k_a, k_v)
+    
     # Optimize the modulated parameters.
     optimizer.step()
     
