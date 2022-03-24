@@ -70,7 +70,18 @@ AVE
 ### Core code demo
 
 Our proposed OGM-GE can work as a simple but useful plugin for some widely used multimodal fusion frameworks. We dispaly the core code part as following:
-代码示例
+```python
+import numpy as np
+from shapley import PermutationSampler
+
+W = np.random.uniform(0, 1, (1, 7))
+W = W/W.sum()
+q = 0.5
+
+solver = PermutationSampler()
+solver.solve_game(W, q)
+shapley_values = solver.get_solution()
+```
 
 ### Train the model
 
