@@ -71,16 +71,26 @@ AVE
 
 Our proposed OGM-GE can work as a simple but useful plugin for some widely used multimodal fusion frameworks. We dispaly the core code part as following:
 ```python
-import numpy as np
-from shapley import PermutationSampler
+import torch
 
-W = np.random.uniform(0, 1, (1, 7))
-W = W/W.sum()
-q = 0.5
+    ---in training step---
+    
+    # Out_a, out_v are calculated to estimate the performance of 'a' and 'v' modality.
+    x, y, out = model(spec.unsqueeze(1).float(), image.float(), label, iteration)
+    out_v = (torch.mm(x,torch.transpose(model.module.fc_.weight[:,:512],0,1)) + model.module.fc_.bias/2)
+    out_a = (torch.mm(y,torch.transpose(model.module.fc_.weight[:,512:],0,1)) + model.module.fc_.bias/2)
+    loss = criterion(out, label)
 
-solver = PermutationSampler()
-solver.solve_game(W, q)
-shapley_values = solver.get_solution()
+    # Calculate original loss first.
+    loss.backward()
+    # Calculation of discrepancy ration and k.
+    k_a,k_v = calculate_coefficient(label, out_a, out_v)
+    # Gradient Modulation begins before optimization, and with GE applied.
+    update_model_with_OGM_GE(model, k_a, k_v)
+    # Optimize the modulated parameters.
+    optimizer.step()
+    
+    ---continue next training step---
 ```
 
 ### Train the model
@@ -97,6 +107,8 @@ You can test the performance of trained model by simply running
 ```python test.py```
 And you can also learn more information(mAP, and so on) by running
 ```python eval.py```
+
+Remember that you don't need to adjust the gradient or other things when testing, just do as usual.
 &nbsp;
 
 ### Demo explanation
