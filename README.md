@@ -51,22 +51,26 @@ Original Dataset：
 
 ### Pre-processing
 
-For example, we provide code to pre-process videos into RGB streams at different frame rates and audio wav files in the file ```'tools'```. By running python files with ```'python preprocess_audio.py'``` and ```'python video2frame-1fps.py'```. The only thing you need to change is the data or other file addresses.
-
-You can also adjust the frame rates by changing the parameter in the ```'preprocess_audio.py'``` file, or the in the ```'video2frame-1fps.py'``` file.
+For example, we provide code to pre-process videos into RGB streams at different frame rates and audio wav files in the file ```'tools'```. By running python files with ```'python pre-processing/preprocess_audio.py'``` and ```'python pre-processing/video2frame-1fps.py'```. The only thing you need to change is the data or other file addresses.You can also adjust the frame rates by changing the parameters in the ```'preprocess_audio.py'``` file, or the ```'video2frame-1fps.py'``` file.
 
 
 After downloading and processing data, you should build the data dir  following proper structure. We give an example of AVE dataset:
 ```
 AVE
 │------ visual
+│---------sample1
+│------------frame1
+│------------frame2
 │------ audio
-│--- other files
+│---------sample1.wav
 ```
 
 &nbsp;
 
+### Core code demo
 
+Our proposed OGM-GE can work as a simple but useful plugin for some widely used multimodal fusion frameworks. We dispaly the core code part as following:
+代码示例
 
 ### Train the model
 
@@ -82,13 +86,38 @@ You can test the performance of trained model by simply running
 ```python test.py```
 And you can also learn more information(mAP, and so on) by running
 ```python eval.py```
+&nbsp;
+
+### Demo explanation
+<div  align="center">    
+<img src="demo/demo_guitar.PNG" width = "80%" />
+</div>
+<div  align="center">    
+<img src="demo/demo_snow.PNG" width = "80%" />
+</div>
+As shown in above picture, 'playing guitar' is a class that audio surpasses visual modality for most samples ('shovelling show' is just opposite), and we can tell audio achieves more adequate training and leads the optimization process. Our OGM-GE (as well as OGM) gains improvement in both modalties as well as multimodal performance, and the weak visual gains more porfit. The evaluation metric used in 'audio' and 'visual' is the predicted accuracy with classification scores just from one specific modality. 
+
 
 
 ### Citations
-The citation of our paper will be released soon.
+If you find this work useful, please consider citing it.
+
+<pre><code>
+@ARTICLE{Peng2022Balanced,
+  title	= {Balanced Multimodal Learning via On-the-fly Gradient Modulation},
+  author	= {Xiaokang Peng, Yake Wei, Andong Deng, Dong Wang, Di Hu},
+  journal	= {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year	= {2022},
+  Url	= {}
+}
+</code></pre>
+
 
 ### References
 
+## Acknowledgement
+
+This research was supported by Public Computing Cloud, Renmin University of China.
 
 
 ### Contact us
