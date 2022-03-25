@@ -67,7 +67,7 @@ AVE
 
 &nbsp;
 
-### Core code demo
+## Core code demo
 
 Our proposed OGM-GE can work as a simple but useful plugin for some widely used multimodal fusion frameworks. We dispaly the core code part as following:
 ```python
@@ -96,7 +96,7 @@ import torch
     ---continue next training step---
 ```
 
-### Train the model
+## Train the model
 
 Before training, you should new a directory named **`model`** to save checkpoint file. 
 ```python train_amd.py```
@@ -104,7 +104,7 @@ You can change related settings in file ```train_amd.py```.
 &nbsp;
 
 
-### Test and Eval
+## Test and Eval
 
 You can test the performance of trained model by simply running
 ```python test.py```
@@ -114,7 +114,7 @@ And you can also learn more information(mAP, and so on) by running
 Remember that you don't need to adjust the gradient or other things when testing, just do as usual.
 &nbsp;
 
-### Demo explanation
+## Demo explanation
 <div  align="center">    
 <img src="demo/demo_guitar.PNG" width = "80%" />
 </div>
@@ -125,7 +125,7 @@ As shown in above picture, 'playing guitar' is a class that audio surpasses visu
 
 
 
-### Citations
+## Citations
 If you find this work useful, please consider citing it.
 
 <pre><code>
@@ -139,14 +139,14 @@ If you find this work useful, please consider citing it.
 </code></pre>
 
 
-### References
+## References
 
 ## Acknowledgement
 
 This research was supported by Public Computing Cloud, Renmin University of China.
 
 
-### Contact us
+## Contact us
 
 If you have any detailed questions or suggestions, you can email us:
 **xiaokangpeng@ruc.edu.cn**
