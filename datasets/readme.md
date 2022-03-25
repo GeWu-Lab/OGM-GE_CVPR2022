@@ -1,1 +1,1 @@
-This directory includes multimodal and unimodal dataloaders.
+This directory includes multimodal and uni-modal dataloaders. The most widely used Concatenation structure is provided as baseline.
