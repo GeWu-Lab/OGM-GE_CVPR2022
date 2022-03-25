@@ -1,3 +1,2 @@
-This place to save class list, training set and testing set division file. Users can devide the traing set into a training set and a validation set.
-
-Python file cut_audios, cut_videos and makecsv are tools help to pre-process raw video data.
+This place to save 'classes list', 'training set' and 'testing set' division file for loading data. Users can devide the traing set into a training set and a validation set.
+Data files of CREMA-D is provided as example. 
