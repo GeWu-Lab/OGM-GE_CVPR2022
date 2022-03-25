@@ -97,14 +97,16 @@ import torch
     # Optimize the modulated parameters.
     optimizer.step()
     
-    ---continue next training step---
+    ---continue for next training step---
 ```
 
 ## Train the model
 
-Before training, you should new a directory named **`model`** to save checkpoint file. 
-```python train_amd.py```
-You can change related settings in file ```train_amd.py```.
+You can begin to train your model simply by
+```python train.py```
+You can also change related settings in file ```train.py```, we set related args inside.
+
+Notice that we are providing OGM-GE as a simple plugin, so we won't stress on the details in usual training settings.
 &nbsp;
 
 
