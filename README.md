@@ -9,10 +9,10 @@ This code includes four main dirs:
 'pre-processig' to pre-process video data, 
 and we also provid training, testing, and tools.
 
-**Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"
-Authors: Xiaokang Peng*, Yake Wei*, Andong Deng, Dong Wang, and Di Hu 
-Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)
-The link of paper will be released soon**
+*Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"*
+*Authors: Xiaokang Peng*, Yake Wei*, Andong Deng, Dong Wang, and Di Hu*
+*Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)*
+*The link of paper will be released soon*
 
 
 ## What's the imbalance phenomenon in multimodal learning task?
