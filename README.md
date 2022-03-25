@@ -3,8 +3,11 @@
 Here is the source code of OGM-GE training strategy proposed in *Balanced Multimodal Learning via On-the-fly Gradient Modulation*, which is a easy way to apply to different vanilla multimodal fusion networks or other multimodal networks, helping to achieve a more balanced and adequate training. More analysis and details are displayed in the paper.
 
 **Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"**
+
 **Authors: Xiaokang Peng\*, Yake Wei\*, Andong Deng, Dong Wang, and Di Hu**
+
 **Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)**
+
 **The link of paper will be released soon**
 
 This repo includes four main dirs: 
