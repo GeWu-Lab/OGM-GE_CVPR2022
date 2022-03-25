@@ -24,7 +24,7 @@ We observe that the potential of multimodal information is not fully exploited e
 ## Method Introduction
 Pipeline of our OGM-GE method, consisting two steps:
 1. On-the-fly gradient modulation for different modalities, which is designed to adaptively balance the training between modalities.
-2. Adaptive Gaussion noise enhancement on gradient, which works as .
+2. Adaptive Gaussion noise enhancement on gradient, which works as a versatile measure to boost model generalization ability.
 <div  align="center">    
 <img src="demo/pipeline.PNG" width = "80%" />
 </div>
