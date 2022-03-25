@@ -5,6 +5,7 @@ and process audio information into with fixed size in the way 'Sound of pixels' 
 
 ## Citations
 
+<pre><code>
 @inproceedings{chen2020vggsound,
   title={Vggsound: A large-scale audio-visual dataset},
   author={Chen, Honglie and Xie, Weidi and Vedaldi, Andrea and Zisserman, Andrew},
@@ -21,5 +22,5 @@ and process audio information into with fixed size in the way 'Sound of pixels' 
   pages={570--586},
   year={2018}
 }
-
+<\code><\pre>
 
