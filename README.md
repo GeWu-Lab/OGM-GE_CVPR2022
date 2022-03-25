@@ -138,9 +138,6 @@ If you find this work useful, please consider citing it.
 }
 </code></pre>
 
-
-## References
-
 ## Acknowledgement
 
 This research was supported by Public Computing Cloud, Renmin University of China.
