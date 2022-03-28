@@ -4,7 +4,7 @@ Here is the source code of OGM-GE training strategy proposed in ''*Balanced Mult
 
 **Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"**
 
-**Authors: Xiaokang Peng\*, Yake Wei\*, Andong Deng, Dong Wang, and Di Hu**
+**Authors: Xiaokang Peng\*, [Yake Wei](https://echo0409.github.io/)\*, [Andong Deng], [Dong Wang](https://redwang.github.io/) and [Di Hu](https://dtaoo.github.io/index.html)**
 
 **Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)**
 
