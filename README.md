@@ -20,7 +20,7 @@ and we also provid training, testing, and tools.
 
 
 ## What's the imbalance phenomenon in multimodal learning task?
-We observe that the potential of multimodal information is not fully exploited even when the multimodal model outperforms its uni-modal counterpart. We conduct linear probing experiments to explore the quality of jointly trained encoders, and find them under-optimized (the yellow line) compared with the uni-modal model (the red line). We proposed the OGM-GE method to improve the optimization process adaptively and achieved consistent improvement (the blue line). We improve both the multimodal performance and uni-model representation as shown in the following figure.
+We observe that **the potential of multimodal information is not fully exploited even when the multimodal model outperforms its uni-modal counterpart.** We conduct linear probing experiments to explore the quality of jointly trained encoders, and find them under-optimized (the yellow line) compared with the uni-modal model (the red line). We proposed the OGM-GE method to improve the optimization process adaptively and achieved consistent improvement (the blue line). We improve both the multimodal performance and uni-model representation as shown in the following figure.
 <div  align="center">    
 <img src="demo/five lines.PNG" width = "80%" />
 </div>
@@ -42,9 +42,9 @@ Pipeline of our OGM-GE method, consisting two steps:
 + python 3.7.6
 
 
-## Data Preparation
-### Original dataset
-Original Dataset：
+## Usage
+### Data Preparation
+Download Original Dataset：
 [VGGSound](https://www.robots.ox.ac.uk/~vgg/data/vggsound/)
 [Kinetics-Sounds](https://github.com/cvdfoundation/kinetics-dataset)
 [CREMA-D](https://github.com/CheyneyComputerScience/CREMA-D)
