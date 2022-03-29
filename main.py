@@ -65,7 +65,7 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
         label = label.to(device)
 
         optimizer.zero_grad()
-        # TODO, make it simpler
+        # TODO, make it simpler and easier to extend
         a, v, out = model(spec.unsqueeze(1).float(), image.float())
 
         if args.fusion_method == 'sum':
@@ -129,6 +129,7 @@ def valid(model, device, dataloader):
 
     with torch.no_grad():
         model.eval()
+        # TODO adapt to all datasets
         num = [0.0 for _ in range(31)]
         acc = [0.0 for _ in range(31)]
         acc_a = [0.0 for _ in range(31)]
