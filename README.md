@@ -4,7 +4,7 @@ Here is the source code of OGM-GE training strategy proposed in ''*Balanced Mult
 
 **Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"**
 
-**Authors: Xiaokang Peng\*, [Yake Wei](https://echo0409.github.io/)\*, Andong Deng, [Dong Wang](https://redwang.github.io/) and [Di Hu](https://dtaoo.github.io/index.html)**
+**Authors: Xiaokang Peng\*, [Yake Wei\*](https://echo0409.github.io/), [Andong Deng](https://antony0621.github.io/), [Dong Wang](https://redwang.github.io/) and [Di Hu](https://dtaoo.github.io/index.html)**
 
 **Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)**
 
@@ -102,7 +102,7 @@ import torch
 
 ## Train the model
 
-You can begin to train your model simply by
+You can begin to train your model simply by 
 ```python train.py```
 You can also change related settings in file ```train.py```, we set related args inside.
 
