@@ -108,7 +108,7 @@ You can begin to train your model simply by
 
 ```python main.py --dataset VGGSound --train```.
 
-You can also adapt to your own setting by adding additional arguments, for example, if you want to train our model on CREMA-D dataset, with gated fusion method, and try to modulate the gradient from epoch 20 to epoch 80, you can run the following command: 
+You can also adapt to your own setting by adding additional arguments, for example, if you want to train our model on CREMA-D dataset, with gated fusion method, and try to modulate the gradient from epoch 20 (default: 0) to epoch 80 (default: 50), you can run the following command: 
 
 ```train.py --dataset CREMAD --train --fusion_method gated --modulation_starts 20 --modulation_ends 80```.
 
@@ -117,6 +117,7 @@ You can also adapt to your own setting by adding additional arguments, for examp
 ## Test and Eval
 
 You can test the performance of trained model by simply running
+
 ```python main.py --model_path /PATH-to-trained-model ```
 
 ## Checkpoints
