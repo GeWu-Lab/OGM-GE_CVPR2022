@@ -6,7 +6,7 @@ Here is the source code of OGM-GE training strategy proposed in ''*Balanced Mult
 
 **Authors: Xiaokang Peng\*, [Yake Wei\*](https://echo0409.github.io/), [Andong Deng](https://antony0621.github.io/), [Dong Wang](https://redwang.github.io/) and [Di Hu](https://dtaoo.github.io/index.html)**
 
-**Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022)**
+**Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022, Oral Presentation)**
 
 **The link of paper will be released soon**
 
