@@ -49,18 +49,18 @@ Download Original Dataset：
 
 ### Pre-processing
 
-For example, we provide code to pre-process videos into RGB frames and audio wav files in the file ```'tools'```. By running python files with:
+For example, we provide code to pre-process videos into RGB frames and audio wav files in directory  ```pre-process/```. The pre-processed data can be obtained by running:
 
-```'python pre-processing/preprocess_audio.py'``` 
+```python pre-processing/preprocess_audio.py``` 
 
 and 
 
-```'python pre-processing/video2frame-1fps.py'```. 
+```python pre-processing/video2frame-1fps.py```. 
 
-The only thing you need to change is the data or other file addresses.You can also adjust the frame rates by changing the parameters in the ```'preprocess_audio.py'``` file, or the ```'video2frame-1fps.py'``` file.
+The only thing you need to change is the data or other file path.You can also adjust the frame rates by changing the parameters in the ```preprocess_audio.py``` , or the ```video2frame-1fps.py```.
 
 
-After downloading and processing data, you should build the data dir  following proper structure. We give an example of AVE dataset:
+After downloading and processing data, you should build the data dir  following proper structure. Take AVE for example:
 ```
 AVE
 │------ visual
@@ -69,6 +69,8 @@ AVE
 │------------frame2
 │------ audio
 │---------sample1.wav
+│---------sample2.wav
+
 ```
 
 &nbsp;
