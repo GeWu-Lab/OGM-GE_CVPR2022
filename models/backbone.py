@@ -1,27 +1,4 @@
-import torch
 import torch.nn as nn
-import torch.nn.functional as F
-
-
-class Aencoder(nn.Module):
-
-    def __init__(self,args):
-        super(Aencoder, self).__init__()
-        self.audnet = Resnet(args)
-
-    def forward(self, audio):
-        aud = self.audnet(audio)
-        return aud
-
-
-def Resnet(opt):
-    if opt.model_depth == 18:
-        model = resnet18(
-            num_classes=opt.n_classes,
-            pool=opt.pool)
-    return model
-
-
 
 
 def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):
@@ -109,13 +86,10 @@ class ResNet(nn.Module):
                                        dilate=replace_stride_with_dilation[1])
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2,
                                        dilate=replace_stride_with_dilation[2])
-        if self.pool == 'avgpool':
-            self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-
-            self.fc = nn.Linear(512 * block.expansion, num_classes)  # 8192
-        elif self.pool == 'vlad':
-            self.avgpool = NetVLAD()
-            self.fc_ = nn.Linear(8192 * block.expansion, num_classes)
+        # if self.pool == 'avgpool':
+        #     self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        #
+        #     self.fc = nn.Linear(512 * block.expansion, num_classes)  # 8192
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -170,75 +144,15 @@ class ResNet(nn.Module):
         x = self.layer4(x)
         out = x
 
-        '''
-        x = self.avgpool(x)
-        x = x.reshape(x.size(0), -1)
-
-        if self.pool == 'avgpool':
-            x = self.fc(x)
-        elif self.pool == 'vlad':
-            x = self.fc_(x)
-        '''
+        # x = self.avgpool(x)
+        # x = x.reshape(x.size(0), -1)
+        #
+        # if self.pool == 'avgpool':
+        #     x = self.fc(x)
+        # elif self.pool == 'vlad':
+        #     x = self.fc_(x)
 
         return out
-
-
-class NetVLAD(nn.Module):
-    """NetVLAD layer implementation"""
-
-    def __init__(self, num_clusters=16, dim=512, alpha=100.0,
-                 normalize_input=True):
-        """
-        Args:
-            num_clusters : int
-                The number of clusters
-            dim : int
-                Dimension of descriptors
-            alpha : float
-                Parameter of initialization. Larger value is harder assignment.
-            normalize_input : bool
-                If true, descriptor-wise L2 normalization is applied to input.
-        """
-        super(NetVLAD, self).__init__()
-        self.num_clusters = num_clusters
-        self.dim = dim
-        self.alpha = alpha
-        self.normalize_input = normalize_input
-        self.conv = nn.Conv2d(dim, num_clusters, kernel_size=(1, 1), bias=True)
-        self.centroids = nn.Parameter(torch.rand(num_clusters, dim))
-        self._init_params()
-
-    def _init_params(self):
-        self.conv.weight = nn.Parameter(
-            (2.0 * self.alpha * self.centroids).unsqueeze(-1).unsqueeze(-1)
-        )
-        self.conv.bias = nn.Parameter(
-            - self.alpha * self.centroids.norm(dim=1)
-        )
-
-    def forward(self, x):
-        N, C = x.shape[:2]
-
-        if self.normalize_input:
-            x = F.normalize(x, p=2, dim=1)  # across descriptor dim
-
-        # soft-assignment
-        soft_assign = self.conv(x).view(N, self.num_clusters, -1)
-        soft_assign = F.softmax(soft_assign, dim=1)
-
-        x_flatten = x.view(N, C, -1)
-
-        # calculate residuals to each clusters
-        residual = x_flatten.expand(self.num_clusters, -1, -1, -1).permute(1, 0, 2, 3) - \
-                   self.centroids.expand(x_flatten.size(-1), -1, -1).permute(1, 2, 0).unsqueeze(0)
-        residual *= soft_assign.unsqueeze(2)
-        vlad = residual.sum(dim=-1)
-
-        vlad = F.normalize(vlad, p=2, dim=2)  # intra-normalization
-        vlad = vlad.view(x.size(0), -1)  # flatten
-        vlad = F.normalize(vlad, p=2, dim=1)  # L2 normalize
-
-        return vlad
 
 
 class Bottleneck(nn.Module):
@@ -284,16 +198,11 @@ class Bottleneck(nn.Module):
         return out
 
 
-def _resnet(arch, block, layers, pretrained, progress, **kwargs):
+def _resnet(arch, block, layers, progress, **kwargs):
     model = ResNet(block, layers, **kwargs)
-    if pretrained:
-        state_dict = load_state_dict_from_url(model_urls[arch],
-                                              progress=progress)
-        model.load_state_dict(state_dict)
     return model
 
 
-def resnet18(pretrained=False, progress=True, **kwargs):
-    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], pretrained, progress,
+def resnet18(progress=True, **kwargs):
+    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], progress,
                    **kwargs)
-

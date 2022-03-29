@@ -3,6 +3,27 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+class Vencoder(nn.Module):
+
+    def __init__(self,args):
+        super(Vencoder, self).__init__()
+        self.audnet = Resnet(args)
+
+    def forward(self, audio):
+        aud = self.audnet(audio)
+        return aud
+
+
+def Resnet(opt):
+    if opt.model_depth == 18:
+        model = resnet18(
+            #num_classes=opt.n_classes,
+            num_classes=1000,
+            pool=opt.pool)
+    return model
+
+
+
 
 def conv3x3(in_planes, out_planes, stride=1, groups=1, dilation=1):
     """3x3 convolution with padding"""
@@ -18,7 +39,7 @@ def conv1x1(in_planes, out_planes, stride=1):
 class BasicBlock(nn.Module):
     expansion = 1
 
-    def __init__(self, inplanes, planes ,stride=1, downsample=None, groups=1,
+    def __init__(self, inplanes, planes, stride=1, downsample=None, groups=1,
                  base_width=64, dilation=1, norm_layer=None):
         super(BasicBlock, self).__init__()
         if norm_layer is None:
@@ -45,7 +66,7 @@ class BasicBlock(nn.Module):
 
         out = self.conv2(out)
         out = self.bn2(out)
-        
+
         if self.downsample is not None:
             identity = self.downsample(x)
 
@@ -54,9 +75,10 @@ class BasicBlock(nn.Module):
 
         return out
 
+
 class ResNet(nn.Module):
 
-    def __init__(self, block, layers, num_classes=1000, pool = 'avgpool',zero_init_residual=False,
+    def __init__(self, block, layers, num_classes=1000, pool='avgpool', zero_init_residual=False,
                  groups=1, width_per_group=64, replace_stride_with_dilation=None,
                  norm_layer=None):
         super(ResNet, self).__init__()
@@ -76,7 +98,7 @@ class ResNet(nn.Module):
                              "or a 3-element tuple, got {}".format(replace_stride_with_dilation))
         self.groups = groups
         self.base_width = width_per_group
-        self.conv1 = nn.Conv2d(1, self.inplanes, kernel_size=7, stride=2, padding=3,
+        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3,
                                bias=False)
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
@@ -90,12 +112,11 @@ class ResNet(nn.Module):
                                        dilate=replace_stride_with_dilation[2])
         if self.pool == 'avgpool':
             self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
-        
-            self.fc = nn.Linear(512 * block.expansion, num_classes) # 8192
+
+            self.fc = nn.Linear(512 * block.expansion, num_classes)  # 8192
         elif self.pool == 'vlad':
             self.avgpool = NetVLAD()
             self.fc_ = nn.Linear(8192 * block.expansion, num_classes)
-        
 
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -123,10 +144,9 @@ class ResNet(nn.Module):
             stride = 1
         if stride != 1 or self.inplanes != planes * block.expansion:
             downsample = nn.Sequential(
-                    conv1x1(self.inplanes, planes * block.expansion, stride),
-                    norm_layer(planes * block.expansion),
-                )
-           
+                conv1x1(self.inplanes, planes * block.expansion, stride),
+                norm_layer(planes * block.expansion),
+            )
 
         layers = []
         layers.append(block(self.inplanes, planes, stride, downsample, self.groups,
@@ -140,6 +160,11 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
+
+        (B, C, T, H, W) = x.size()
+        x = x.permute(0, 2, 1, 3, 4).contiguous()
+        x = x.view(B * T, C, H, W)
+
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -149,14 +174,19 @@ class ResNet(nn.Module):
         x = self.layer2(x)
         x = self.layer3(x)
         x = self.layer4(x)
+
+        out = x
+        '''
         x = self.avgpool(x)
         x = x.reshape(x.size(0), -1)
+
         if self.pool == 'avgpool':
             x = self.fc(x)
         elif self.pool == 'vlad':
             x = self.fc_(x)
+        '''
+        return out
 
-        return x
 
 class NetVLAD(nn.Module):
     """NetVLAD layer implementation"""
@@ -202,10 +232,10 @@ class NetVLAD(nn.Module):
         soft_assign = F.softmax(soft_assign, dim=1)
 
         x_flatten = x.view(N, C, -1)
-        
+
         # calculate residuals to each clusters
         residual = x_flatten.expand(self.num_clusters, -1, -1, -1).permute(1, 0, 2, 3) - \
-            self.centroids.expand(x_flatten.size(-1), -1, -1).permute(1, 2, 0).unsqueeze(0)
+                   self.centroids.expand(x_flatten.size(-1), -1, -1).permute(1, 2, 0).unsqueeze(0)
         residual *= soft_assign.unsqueeze(2)
         vlad = residual.sum(dim=-1)
 
@@ -214,6 +244,7 @@ class NetVLAD(nn.Module):
         vlad = F.normalize(vlad, p=2, dim=1)  # L2 normalize
 
         return vlad
+
 
 class Bottleneck(nn.Module):
     expansion = 4
@@ -258,8 +289,6 @@ class Bottleneck(nn.Module):
         return out
 
 
-
-
 def _resnet(arch, block, layers, pretrained, progress, **kwargs):
     model = ResNet(block, layers, **kwargs)
     if pretrained:
@@ -270,115 +299,6 @@ def _resnet(arch, block, layers, pretrained, progress, **kwargs):
 
 
 def resnet18(pretrained=False, progress=True, **kwargs):
-    """Constructs a ResNet-18 model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
     return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], pretrained, progress,
                    **kwargs)
 
-
-def resnet34(pretrained=False, progress=True, **kwargs):
-    """Constructs a ResNet-34 model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    return _resnet('resnet34', BasicBlock, [3, 4, 6, 3], pretrained, progress,
-                   **kwargs)
-
-
-def resnet50(pretrained=False, progress=True, **kwargs):
-    """Constructs a ResNet-50 model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    return _resnet('resnet50', Bottleneck, [3, 4, 6, 3], pretrained, progress,
-                   **kwargs)
-
-
-def resnet101(pretrained=False, progress=True, **kwargs):
-    """Constructs a ResNet-101 model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    return _resnet('resnet101', Bottleneck, [3, 4, 23, 3], pretrained, progress,
-                   **kwargs)
-
-
-def resnet152(pretrained=False, progress=True, **kwargs):
-    """Constructs a ResNet-152 model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    return _resnet('resnet152', Bottleneck, [3, 8, 36, 3], pretrained, progress,
-                   **kwargs)
-
-
-def resnext50_32x4d(pretrained=False, progress=True, **kwargs):
-    """Constructs a ResNeXt-50 32x4d model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    kwargs['groups'] = 32
-    kwargs['width_per_group'] = 4
-    return _resnet('resnext50_32x4d', Bottleneck, [3, 4, 6, 3],
-                   pretrained, progress, **kwargs)
-
-
-def resnext101_32x8d(pretrained=False, progress=True, **kwargs):
-    """Constructs a ResNeXt-101 32x8d model.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    kwargs['groups'] = 32
-    kwargs['width_per_group'] = 8
-    return _resnet('resnext101_32x8d', Bottleneck, [3, 4, 23, 3],
-                   pretrained, progress, **kwargs)
-
-
-def wide_resnet50_2(pretrained=False, progress=True, **kwargs):
-    """Constructs a Wide ResNet-50-2 model.
-
-    The model is the same as ResNet except for the bottleneck number of channels
-    which is twice larger in every block. The number of channels in outer 1x1
-    convolutions is the same, e.g. last block in ResNet-50 has 2048-512-2048
-    channels, and in Wide ResNet-50-2 has 2048-1024-2048.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    kwargs['width_per_group'] = 64 * 2
-    return _resnet('wide_resnet50_2', Bottleneck, [3, 4, 6, 3],
-                   pretrained, progress, **kwargs)
-
-
-def wide_resnet101_2(pretrained=False, progress=True, **kwargs):
-    """Constructs a Wide ResNet-101-2 model.
-
-    The model is the same as ResNet except for the bottleneck number of channels
-    which is twice larger in every block. The number of channels in outer 1x1
-    convolutions is the same, e.g. last block in ResNet-50 has 2048-512-2048
-    channels, and in Wide ResNet-50-2 has 2048-1024-2048.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    kwargs['width_per_group'] = 64 * 2
-    return _resnet('wide_resnet101_2', Bottleneck, [3, 4, 23, 3],
-                   pretrained, progress, **kwargs)
