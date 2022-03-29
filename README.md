@@ -102,23 +102,21 @@ import torch
 
 ## Train the model
 
-You can begin to train your model simply by 
-```python train.py```
-You can also change related settings in file ```train.py```, we set related args inside.
+You can begin to train your model simply by
 
-Notice that we are providing OGM-GE as a simple plugin, so we won't stress on the details in usual training settings.
-&nbsp;
+```python main.py --dataset VGGSound --train```.
+
+You can also adapt to your own setting by adding additional arguments, for example, if you want to train our model on CREMA-D dataset, with gated fusion method, and try to modulate the gradient from epoch 20 to epoch 80, you can run the following command: 
+
+```train.py --dataset CREMAD --train --fusion_method gated --modulation_starts 20 --modulation_ends 80```.
+
 
 
 ## Test and Eval
 
 You can test the performance of trained model by simply running
-```python test.py```
-And you can also learn more information(mAP, and so on) by running
-```python eval.py```
+```python main.py --model_path /PATH-to-trained-model ```
 
-Remember that you don't need to adjust the gradient or other things when testing, just do as usual.
-&nbsp;
 
 ## Demo explanation
 <div  align="center">    
