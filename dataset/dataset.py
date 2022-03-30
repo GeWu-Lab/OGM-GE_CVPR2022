@@ -17,38 +17,40 @@ class AVDataset(Dataset):
         data2class = {}
         self.mode = mode
 
-        if args.dataset == 'VGGSound':
-            pass
-        elif args.dataset == 'KineticSound':
-            pass
-        elif args.dataset == 'CREMAD':
-            pass
-        elif args.dataset == 'AVE':
-            self.visual_feature_path = '/home/yake_wei/data/AVE_av/visual/'
-            self.audio_feature_path = '/home/yake_wei/data/AVE_av/audio_spec/'
-            with open('/home/yake_wei/code/AVE_CVPR22/datasets/stat.txt') as f:
-                csv_reader = csv.reader(f)
-                for row in csv_reader:
-                    classes.append(row[0])
-            if mode == 'train':
-                csv_file = '/home/yake_wei/code/AVE_CVPR22/datasets/my_train.txt'
-            else:
-                csv_file = '/home/yake_wei/code/AVE_CVPR22/datasets/my_test.txt'
-            with open(csv_file) as f:
-                csv_reader = csv.reader(f)
-                for item in csv_reader:
-                    audio_path = os.path.join('/home/yake_wei/data/AVE_av/audio_spec', item[1] + '.pkl')
-                    visual_path = os.path.join('/home/yake_wei/data/AVE_av/visual', item[1])
-                    if os.path.exists(audio_path) and os.path.exists(visual_path):
+        self.data_root = '../data/'
+
+        self.visual_feature_path = os.path.join(self.data_root, args.dataset, 'visual/')
+        self.audio_feature_path = os.path.join(self.data_root, args.dataset, 'audio_spec/')
+        self.stat_path = os.path.join(self.data_root, args.dataset, 'stat.txt')
+        self.train_txt = os.path.join(self.data_root, args.dataset, 'my_train.txt')
+        self.test_txt = os.path.join(self.data_root, args.dataset, 'my_test.txt')
+
+        with open(self.stat_path) as f1:
+            csv_reader = csv.reader(f1)
+            for row in csv_reader:
+                classes.append(row[0])
+
+        if mode == 'train':
+            csv_file = self.train_txt
+        else:
+            csv_file = self.test_txt
+
+        with open(csv_file) as f2:
+            csv_reader = csv.reader(f2)
+            for item in csv_reader:
+                audio_path = os.path.join(self.audio_feature_path, item[1] + '.pkl')
+                visual_path = os.path.join(self.visual_feature_path, item[1])
+                if os.path.exists(audio_path) and os.path.exists(visual_path):
+                    if args.dataset == 'AVE':
+                        # AVE, delete repeated labels
                         a = set(data)
                         if item[1] in a:
                             del data2class[item[1]]
                             data.remove(item[1])
-                        else:
-                            data.append(item[1])
-                            data2class[item[1]] = item[0]
-                    else:
-                        continue
+                    data.append(item[1])
+                    data2class[item[1]] = item[0]
+                else:
+                    continue
 
         self.classes = sorted(classes)
 
