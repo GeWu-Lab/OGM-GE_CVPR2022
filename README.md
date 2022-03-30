@@ -129,7 +129,8 @@ You can test the performance of trained model by simply running
 ```python main.py --ckpt_path /PATH-to-trained-ckpt ```
 
 ## Checkpoints
-Coming Soon. CREMAD..
+CREMA-D: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/CREMAD_normal.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/CREMAD_balance_noise_0326.pth)
+AVE: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_concat.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_60_noise_0.3.pth)
 
 ## Demo explanation
 <div  align="center">    
