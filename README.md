@@ -106,6 +106,8 @@ import torch
 
 ## Train the model
 
+The difference between ```main.py``` and ```main_old.py``` is that the former one considers adaptive imbalance during the whole optimization, while the auditory modality is viewed as dominant by default. The results from our CVPR paper is based on ```main_old.py```, while the Eq. 10 in paper introduces a general situation which is the same as ```main.py```. 
+
 ### default modulation setting: 
 
 ```--modulation OGM_GE --modulation_starts 0 --modulation_ends 50 --fusion_method concat --alpha 0.5```
