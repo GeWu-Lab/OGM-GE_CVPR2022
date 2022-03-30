@@ -8,7 +8,7 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 
 **Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022, Oral Presentation)**
 
-**[arXiv](https://arxiv.org/abs/2203.15332)**
+**[[arXiv](https://arxiv.org/abs/2203.15332)]**
 
 
 
