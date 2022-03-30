@@ -51,11 +51,11 @@ Download Original Dataset：
 
 For example, we provide code to pre-process videos into RGB frames and audio wav files in directory  ```pre-process/```. The pre-processed data can be obtained by running:
 
-```python pre-processing/preprocess_audio.py``` 
+```python pre-processing/obtain_audio_spectrogram.py``` 
 
 and 
 
-```python pre-processing/video2frame-1fps.py```. 
+```python pre-processing/obtain_frames.py```. 
 
 The only thing you need to change is the data or other file path.You can also adjust the frame rates by changing the parameters in the ```preprocess_audio.py``` , or the ```video2frame-1fps.py```.
 
@@ -89,7 +89,7 @@ import torch
     out_a = (torch.mm(y,torch.transpose(model.module.fc_.weight[:,512:],0,1)) + model.module.fc_.bias/2)
     loss = criterion(out, label)
 
-    # Calculate original loss first.
+    # Calculate original gradient first
     loss.backward()
     
     # Calculation of discrepancy ration and k.
@@ -126,7 +126,7 @@ You can also adapt to your own setting by adding additional arguments, for examp
 
 You can test the performance of trained model by simply running
 
-```python main.py --model_path /PATH-to-trained-model ```
+```python main.py --ckpt_path /PATH-to-trained-ckpt ```
 
 ## Checkpoints
 Coming Soon.
