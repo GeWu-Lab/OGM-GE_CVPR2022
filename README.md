@@ -1,6 +1,6 @@
 # Official OGM-GE in PyTorch
 
-Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Multimodal Learning via On-the-fly Gradient Modulation*'', which is a flexible plug-in module to enhance the optimization process of multimodal learning. Please refer to our CVPR'22 paper for more details.
+Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Multimodal Learning via On-the-fly Gradient Modulation*'', which is a flexible plug-in module to enhance the optimization process of multimodal learning. Please refer to our [CVPR 2022 paper](https://arxiv.org/abs/2203.15332) for more details.
 
 **Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"**
 
