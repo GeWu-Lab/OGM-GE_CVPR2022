@@ -4,7 +4,7 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 
 **Paper Title: "Balanced Multimodal Learning via On-the-fly Gradient Modulation"**
 
-**Authors: Xiaokang Peng\*, [Yake Wei\*](https://echo0409.github.io/), [Andong Deng](https://antony0621.github.io/), [Dong Wang](https://redwang.github.io/) and [Di Hu](https://dtaoo.github.io/index.html)**
+**Authors: Xiaokang Peng\*, [Yake Wei\*](https://echo0409.github.io/), [Andong Deng](https://dengandong.github.io/), [Dong Wang](https://redwang.github.io/) and [Di Hu](https://dtaoo.github.io/index.html)**
 
 **Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022, Oral Presentation)**
 
