@@ -167,4 +167,4 @@ This project is released under the [GNU General Public License v3.0](https://git
 ## Contact us
 
 If you have any detailed questions or suggestions, you can email us:
-**xiaokangpeng@ruc.edu.cn**
+**xiaokangpeng@ruc.edu.cn**, **yakewei@ruc.edu.cn** and **andongdeng69@gmail.com**
