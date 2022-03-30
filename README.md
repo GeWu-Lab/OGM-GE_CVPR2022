@@ -57,10 +57,8 @@ and
 
 ```python pre-processing/obtain_frames.py```. 
 
-The only thing you need to change is the data or other file path.You can also adjust the frame rates by changing the parameters in the ```preprocess_audio.py``` , or the ```video2frame-1fps.py```.
 
-
-After downloading and processing data, you should build the data dir  following proper structure. Take AVE for example:
+After downloading and processing data, you should build the data directory following proper structure. Take AVE for example:
 ```
 AVE
 │------ visual
