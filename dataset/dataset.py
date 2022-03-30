@@ -77,14 +77,14 @@ class AVDataset(Dataset):
 
         if self.mode == 'train':
 
-            transf = transforms.Compose([
+            transform = transforms.Compose([
                 transforms.RandomResizedCrop(224),
                 transforms.RandomHorizontalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
             ])
         else:
-            transf = transforms.Compose([
+            transform = transforms.Compose([
                 transforms.Resize(size=(224, 224)),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
@@ -101,7 +101,7 @@ class AVDataset(Dataset):
             t[i] = seg * i + 1
             path1.append('frame_0000' + str(t[i]) + '.jpg')
             image.append(Image.open(visual_path + "/" + path1[i]).convert('RGB'))
-            image_arr.append(transf(image[i]))
+            image_arr.append(transform(image[i]))
             image_arr[i] = image_arr[i].unsqueeze(1).float()
             if i == 0:
                 image_n = copy.copy(image_arr[i])

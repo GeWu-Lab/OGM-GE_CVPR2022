@@ -12,5 +12,5 @@ def obtain_top1_accuracy(output, target):
         correct_k = correct[:1].reshape(-1).float().sum(0, keepdims=True)
         top1 = correct_k.mul_(100.0 / batch_size)
 
-    return top1
+    return correct_k, top1
 
