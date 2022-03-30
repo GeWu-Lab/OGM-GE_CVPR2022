@@ -50,6 +50,7 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
     criterion = nn.CrossEntropyLoss()
     softmax = nn.Softmax(dim=1)
     relu = nn.ReLU(inplace=True)
+    tanh = nn.Tanh()
 
     model.train()
     print("Start training ... ")
@@ -85,35 +86,41 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
         loss_a = criterion(out_a, label)
         loss.backward()
 
-        ratio = sum([softmax(out_a)[i][label[i]] for i in range(out_a.size(0))]) / sum(
-            [softmax(out_v)[i][label[i]] for i in range(out_v.size(0))])
+        if args.mudulation == 'Normal':
+            # no modulation, regular optimization
+            pass
+        else:
+            ratio = sum([softmax(out_a)[i][label[i]] for i in range(out_a.size(0))]) / sum(
+                [softmax(out_v)[i][label[i]] for i in range(out_v.size(0))])
 
-        gauss_v = relu(1 / ratio - 1)
-        gauss_v = torch.tanh(gauss_v)
+            gauss_v = relu(1 / ratio - 1)
+            gauss_v = torch.tanh(gauss_v)
 
-        gauss_a = relu(args.alpha * ratio)
-        gauss_a = torch.tanh(gauss_a)
+            gauss_a = relu(args.alpha * ratio)
+            gauss_a = torch.tanh(gauss_a)
 
-        if args.use_tensorboard:
-            iteration = epoch * len(dataloader) + step
-            writer.add_scalar('data/ratio', ratio, iteration)
-            writer.add_scalar('data/gauss_v', gauss_v, iteration)
-            writer.add_scalar('data/gauss_a', gauss_a, iteration)
+            if args.use_tensorboard:
+                iteration = epoch * len(dataloader) + step
+                writer.add_scalar('data/ratio', ratio, iteration)
+                writer.add_scalar('data/gauss_v', gauss_v, iteration)
+                writer.add_scalar('data/gauss_a', gauss_a, iteration)
 
-        if args.modulation_starts >= epoch >= args.modulation_ends:
-            gauss_a = 0
-            gauss_v = 0
+            if args.modulation_starts >= epoch >= args.modulation_ends:
+                gauss_a = 0
+                gauss_v = 0
 
-        for name, parms in model.named_parameters():
-            layer = str(name).split('.')[1]
+            for name, parms in model.named_parameters():
+                layer = str(name).split('.')[1]
 
-            if 'audio' in layer and len(parms.grad.size()) == 4:
-                parms.grad *= (1 - gauss_a)
-                parms.grad += torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
+                if 'audio' in layer and len(parms.grad.size()) == 4:
+                    parms.grad *= (1 - gauss_a)
+                    if args.modulation == 'OGM_GE':
+                        parms.grad += torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
 
-            if 'visual' in layer and len(parms.grad.size()) == 4:
-                parms.grad *= (1 - gauss_v)
-                parms.grad += torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
+                if 'visual' in layer and len(parms.grad.size()) == 4:
+                    parms.grad *= (1 - gauss_v)
+                    if args.modulation == 'OGM_GE':
+                        parms.grad += torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
 
         optimizer.step()
         scheduler.step()
@@ -128,13 +135,24 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
 def valid(args, model, device, dataloader):
     softmax = nn.Softmax(dim=1)
 
+    if args.dataset == 'VGGSound':
+        n_classes = 309
+    elif args.dataset == 'KineticSound':
+        n_classes = 31
+    elif args.dataset == 'CREMAD':
+        n_classes = 6
+    elif args.dataset == 'AVE':
+        n_classes = 28
+    else:
+        raise NotImplementedError('Incorrect dataset name {}'.format(args.dataset))
+
     with torch.no_grad():
         model.eval()
-        # TODO adapt to all datasets
-        num = [0.0 for _ in range(31)]
-        acc = [0.0 for _ in range(31)]
-        acc_a = [0.0 for _ in range(31)]
-        acc_v = [0.0 for _ in range(31)]
+        # TODO: more flexible
+        num = [0.0 for _ in range(n_classes)]
+        acc = [0.0 for _ in range(n_classes)]
+        acc_a = [0.0 for _ in range(n_classes)]
+        acc_v = [0.0 for _ in range(n_classes)]
 
         for step, (spec, image, label, name) in enumerate(dataloader):
 
@@ -142,16 +160,28 @@ def valid(args, model, device, dataloader):
             image = image.to(device)
             label = label.to(device)
 
-            x, y, out = model(spec.unsqueeze(1).float(), image.float(), label, -1)
-            out_v = (torch.mm(x, torch.transpose(model.fc_.weight[:, :512], 0, 1)) + model.fc_.bias / 2)
-            out_a = (torch.mm(y, torch.transpose(model.fc_.weight[:, 512:], 0, 1)) + model.fc_.bias / 2)
+            a, v, out = model(spec.unsqueeze(1).float(), image.float(), label, -1)
+
+            if args.fusion_method == 'sum':
+                out_v = (torch.mm(v, torch.transpose(model.fusion_module.fc_y.weight, 0, 1)) +
+                         model.fusion_module.fc_y.bias / 2)
+                out_a = (torch.mm(a, torch.transpose(model.fusion_module.fc_x.weight, 0, 1)) +
+                         model.fusion_module.fc_x.bias / 2)
+            else:
+                out_v = (torch.mm(v, torch.transpose(model.fusion_module.fc_out.weight[:, :512], 0, 1)) +
+                         model.fusion_module.fc_out.bias / 2)
+                out_a = (torch.mm(a, torch.transpose(model.fusion_module.fc_out.weight[:, 512:], 0, 1)) +
+                         model.fusion_module.fc_out.bias / 2)
+
             prediction = softmax(out)
+            pred_v = softmax(out_v)
+            pred_a = softmax(out_a)
 
             for i, item in enumerate(name):
 
                 ma = np.max(prediction[i].cpu().data.numpy())
-                v = np.max(out_v[i].cpu().data.numpy())
-                a = np.max(out_a[i].cpu().data.numpy())
+                v = np.max(pred_v[i].cpu().data.numpy())
+                a = np.max(pred_a[i].cpu().data.numpy())
                 num[label[i]] += 1.0
                 if abs(prediction[i].cpu().data.numpy()[label[i]] - ma) <= 0.0001:
                     acc[label[i]] += 1.0
@@ -207,66 +237,91 @@ def main():
     test_dataloader = DataLoader(test_dataset, batch_size=args.batch_size,
                                  shuffle=False, num_workers=32, pin_memory=True)
 
-    best_acc = 0.0
+    if args.train:
 
-    for epoch in range(args.epochs):
+        best_acc = 0.0
 
-        print('Epoch: {}: '.format(epoch))
+        for epoch in range(args.epochs):
 
-        if args.use_tensorboard:
+            print('Epoch: {}: '.format(epoch))
 
-            writer_path = os.path.join(args.tensorboard_path, args.dataset)
-            if not os.path.exists(writer_path):
-                os.mkdir(writer_path)
-            log_name = '{}_{}'.format(args.fusion_method, args.modulation)
-            writer = SummaryWriter(os.path.join(writer_path, log_name))
+            if args.use_tensorboard:
 
-            batch_loss, batch_loss_a, batch_loss_v = train_epoch(args, epoch, model, device,
-                                                                 train_dataloader, optimizer, scheduler, writer)
-            acc, acc_a, acc_v = valid(model, device, test_dataloader)
+                writer_path = os.path.join(args.tensorboard_path, args.dataset)
+                if not os.path.exists(writer_path):
+                    os.mkdir(writer_path)
+                log_name = '{}_{}'.format(args.fusion_method, args.modulation)
+                writer = SummaryWriter(os.path.join(writer_path, log_name))
 
-            writer.add_scalars('Loss', {'Total Loss': batch_loss,
-                                        'Audio Loss': batch_loss_a,
-                                        'Visual Loss': batch_loss_v}, epoch)
+                batch_loss, batch_loss_a, batch_loss_v = train_epoch(args, epoch, model, device,
+                                                                     train_dataloader, optimizer, scheduler, writer)
+                acc, acc_a, acc_v = valid(args, model, device, test_dataloader)
 
-            writer.add_scalars('Evaluation', {'Total Accuracy': acc,
-                                              'Audio Accuracy': acc_a,
-                                              'Visual Accuracy': acc_v}, epoch)
+                writer.add_scalars('Loss', {'Total Loss': batch_loss,
+                                            'Audio Loss': batch_loss_a,
+                                            'Visual Loss': batch_loss_v}, epoch)
 
-        else:
-            batch_loss, batch_loss_a, batch_loss_v = train_epoch(args, epoch, model, device,
-                                                                 train_dataloader, optimizer, scheduler)
-            acc, acc_a, acc_v = valid(model, device, test_dataloader)
+                writer.add_scalars('Evaluation', {'Total Accuracy': acc,
+                                                  'Audio Accuracy': acc_a,
+                                                  'Visual Accuracy': acc_v}, epoch)
 
-        if acc > best_acc:
-            best_acc = float(acc)
+            else:
+                batch_loss, batch_loss_a, batch_loss_v = train_epoch(args, epoch, model, device,
+                                                                     train_dataloader, optimizer, scheduler)
+                acc, acc_a, acc_v = valid(args, model, device, test_dataloader)
 
-            if not os.path.exists(args.ckpt_path):
-                os.mkdir(args.ckpt_path)
+            if acc > best_acc:
+                best_acc = float(acc)
 
-            model_name = 'best_model_of_dataset_{}_{}_alpha_{}_' \
-                         'optimizer_{}_modulate_starts_{}_ends_{}_' \
-                         'epoch_{}_acc_{}.pth'.format(args.dataset,
-                                                      args.modulation,
-                                                      args.alpha,
-                                                      args.optimizer,
-                                                      args.modulate_starts,
-                                                      args.modulate_ends,
-                                                      epoch, acc)
+                if not os.path.exists(args.ckpt_path):
+                    os.mkdir(args.ckpt_path)
 
-            saved_dict = {'saved_epoch': epoch,
-                          'acc': acc,
-                          'model': model.state_dict(),
-                          'optimizer': optimizer.state_dict(),
-                          'scheduler': scheduler.state_dict()}
+                model_name = 'best_model_of_dataset_{}_{}_alpha_{}_' \
+                             'optimizer_{}_modulate_starts_{}_ends_{}_' \
+                             'epoch_{}_acc_{}.pth'.format(args.dataset,
+                                                          args.modulation,
+                                                          args.alpha,
+                                                          args.optimizer,
+                                                          args.modulate_starts,
+                                                          args.modulate_ends,
+                                                          epoch, acc)
 
-            save_dir = os.path.join(args.ckpt_path, model_name)
+                saved_dict = {'saved_epoch': epoch,
+                              'modulation': args.modulation,
+                              'alpha': args.alpha,
+                              'fusion': args.fusion_method,
+                              'acc': acc,
+                              'model': model.state_dict(),
+                              'optimizer': optimizer.state_dict(),
+                              'scheduler': scheduler.state_dict()}
 
-            torch.save(saved_dict, save_dir)
-            print('The best model has been saved at {}.'.format(save_dir))
-            print("Loss: {.2f}, Acc: {.2f}".format(batch_loss, acc))
-        else:
-            print("Loss: {.2f}, Acc: {.2f}, Best Acc: {.2f}".format(batch_loss, acc, best_acc))
+                save_dir = os.path.join(args.ckpt_path, model_name)
+
+                torch.save(saved_dict, save_dir)
+                print('The best model has been saved at {}.'.format(save_dir))
+                print("Loss: {.2f}, Acc: {.2f}".format(batch_loss, acc))
+            else:
+                print("Loss: {.2f}, Acc: {.2f}, Best Acc: {.2f}".format(batch_loss, acc, best_acc))
+
+    else:
+        # first load trained model
+        loaded_dict = torch.load(args.ckpt_path)
+        # epoch = loaded_dict['saved_epoch']
+        modulation = loaded_dict['modulation']
+        # alpha = loaded_dict['alpha']
+        fusion = loaded_dict['fusion']
+        state_dict = loaded_dict['model']
+        # optimizer_dict = loaded_dict['optimizer']
+        # scheduler = loaded_dict['scheduler']
+
+        assert modulation == args.modulation, 'inconsistency between modulation method of loaded model and args !'
+        assert fusion == args.fusion_method, 'inconsistency between fusion method of loaded model and args !'
+
+        model = model.load_state_dict(state_dict)
+        print('Trained model loaded!')
+
+        acc, acc_a, acc_v = valid(args, model, device, test_dataloader)
+        print('Accuracy: {}, accuracy_a: {}, accuracy_v: {}'.format(acc, acc_a, acc_v))
 
 
 if __name__ == "__main__":
