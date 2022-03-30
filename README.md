@@ -129,7 +129,7 @@ You can test the performance of trained model by simply running
 ```python main.py --ckpt_path /PATH-to-trained-ckpt ```
 
 ## Checkpoints
-Coming Soon.
+Coming Soon. CREMAD.
 
 ## Demo explanation
 <div  align="center">    
