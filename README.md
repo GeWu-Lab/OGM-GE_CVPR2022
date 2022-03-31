@@ -39,11 +39,12 @@ Pipeline of our OGM-GE method, consisting of two submodules:
 ## Usage
 ### Data Preparation
 Download Original Dataset：
-[VGGSound](https://www.robots.ox.ac.uk/~vgg/data/vggsound/),
-[Kinetics-Sounds](https://github.com/cvdfoundation/kinetics-dataset),
 [CREMA-D](https://github.com/CheyneyComputerScience/CREMA-D),
-[AVE](https://sites.google.com/view/audiovisualresearch) and
-[ESC50](https://github.com/karoldvl/ESC-50/archive/master.zip).
+[AVE](https://sites.google.com/view/audiovisualresearch),
+[VGGSound](https://www.robots.ox.ac.uk/~vgg/data/vggsound/),
+[Kinetics-Sounds](https://github.com/cvdfoundation/kinetics-dataset).
+
+[comment]: <> ([ESC50]&#40;https://github.com/karoldvl/ESC-50/archive/master.zip&#41;.)
 
 
 
@@ -104,7 +105,12 @@ import torch
 
 ## Train the model
 
-The difference between ```main.py``` and ```main_old.py``` is that the former one considers adaptive imbalance during the whole optimization, while the auditory modality is viewed as dominant by default. The results from our CVPR paper is based on ```main_old.py```, while the Eq. 10 in paper introduces a general situation which is the same as ```main.py```. 
+The difference between ```main.py``` and ```main_old.py``` is as follows:
+
+In ```main.py```,  we consider adaptive imbalance during the whole optimization as the Eq.10 in our paper.
+
+In ```main_old.py```, the auditory modality is viewed as dominant by default.
+
 
 ### default modulation setting: 
 
@@ -127,11 +133,22 @@ You can test the performance of trained model by simply running
 ```python main.py --ckpt_path /PATH-to-trained-ckpt ```
 
 ## Checkpoints
+
+### Recognition
+
 CREMA-D: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/CREMAD_normal.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/CREMAD_balance_noise_0326.pth)
 
 AVE: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_concat.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_60_noise_0.3.pth)
 
 KineticSound and VGGSound: Coming Soon
+
+### Event Localization
+
+AVE: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_L_normal.pt), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_L_noise.pt)
+
+### Representation Learning
+
+Coming Soon
 
 ## Demo explanation
 <div  align="center">    
