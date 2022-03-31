@@ -107,7 +107,7 @@ import torch
 
 The difference between ```main.py``` and ```main_old.py``` is as follows:
 
-In ```main.py```,  we consider adaptive imbalance during the whole optimization as the Eq.10 in our paper.
+In ```main.py```,  we consider adaptive imbalance during the whole optimization according to the Eq.10 in our paper.
 
 In ```main_old.py```, the auditory modality is viewed as dominant by default.
 
@@ -134,7 +134,7 @@ You can test the performance of trained model by simply running
 
 ## Checkpoints
 
-### Recognition
+### Classification
 
 CREMA-D: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/CREMAD_normal.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/CREMAD_balance_noise_0326.pth)
 
@@ -146,9 +146,6 @@ KineticSound and VGGSound: Coming Soon
 
 AVE: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_L_normal.pt), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_L_noise.pt)
 
-### Representation Learning
-
-Coming Soon
 
 ## Demo explanation
 <div  align="center">    
