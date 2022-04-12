@@ -158,7 +158,7 @@ As shown in above picture, 'playing guitar' is a class that audio surpasses visu
 
 
 
-## Citations
+## Citation
 If you find this work useful, please consider citing it.
 
 <pre><code>
