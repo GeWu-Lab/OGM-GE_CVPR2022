@@ -110,8 +110,6 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
             else:
                 coeff_a = 1 - tanh(args.alpha * relu(ratio_a))
                 coeff_v = 1
-            # coeff_v = 1 - tanh(args.alpha * relu(ratio_v - 1))
-            # coeff_a = 1 - tanh(args.alpha * relu(ratio_a - 1))
 
             if args.use_tensorboard:
                 iteration = epoch * len(dataloader) + step
