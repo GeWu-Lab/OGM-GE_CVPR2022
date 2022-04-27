@@ -135,11 +135,12 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
                         parms.grad += torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
 
         optimizer.step()
-        scheduler.step()
 
         _loss += loss.item()
         _loss_a += loss_a.item()
         _loss_v += loss_v.item()
+
+    scheduler.step()
 
     return _loss / len(dataloader), _loss_a / len(dataloader), _loss_v / len(dataloader)
 

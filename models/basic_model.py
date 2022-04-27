@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from backbone import resnet18
@@ -31,8 +32,8 @@ class AVClassifier(nn.Module):
         else:
             raise NotImplementedError('Incorrect fusion method: {}!'.format(fusion))
 
-        self.audio_net = resnet18()
-        self.visual_net = resnet18()
+        self.audio_net = resnet18(modality='audio')
+        self.visual_net = resnet18(modality='visual')
 
     def forward(self, audio, visual):
 
@@ -41,11 +42,14 @@ class AVClassifier(nn.Module):
 
         (_, C, H, W) = v.size()
         B = a.size()[0]
-        a = a.view(B, -1, C, H, W)
-        a = a.permute(0, 2, 1, 3, 4)
+        v = v.view(B, -1, C, H, W)
+        v = v.permute(0, 2, 1, 3, 4)
 
-        a = F.adaptive_avg_pool3d(a, 1)
-        v = F.adaptive_avg_pool2d(v, 1)
+        a = F.adaptive_avg_pool2d(a, 1)
+        v = F.adaptive_avg_pool3d(v, 1)
+
+        a = torch.flatten(a, 1)
+        v = torch.flatten(v, 1)
 
         a, v, out = self.fusion_module(a, v)
 
