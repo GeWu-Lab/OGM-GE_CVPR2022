@@ -203,7 +203,7 @@ def valid(args, model, device, dataloader):
                 if abs(pred_a[i].cpu().data.numpy()[label[i]] - a) <= 0.0001:
                     acc_a[label[i]] += 1.0
 
-    return sum(acc_v) / sum(num), sum(acc_a) / sum(num), sum(acc) / sum(num)
+    return sum(acc) / sum(num), sum(acc_a) / sum(num), sum(acc_v) / sum(num)
 
 
 def main():
