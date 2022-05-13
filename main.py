@@ -198,9 +198,9 @@ def valid(args, model, device, dataloader):
                 num[label[i]] += 1.0
                 if abs(prediction[i].cpu().data.numpy()[label[i]] - ma) <= 0.0001:
                     acc[label[i]] += 1.0
-                if abs(out_v[i].cpu().data.numpy()[label[i]] - v) <= 0.0001:
+                if abs(pred_v[i].cpu().data.numpy()[label[i]] - v) <= 0.0001:
                     acc_v[label[i]] += 1.0
-                if abs(out_a[i].cpu().data.numpy()[label[i]] - a) <= 0.0001:
+                if abs(pred_a[i].cpu().data.numpy()[label[i]] - a) <= 0.0001:
                     acc_a[label[i]] += 1.0
 
     return sum(acc_v) / sum(num), sum(acc_a) / sum(num), sum(acc) / sum(num)
