@@ -165,7 +165,7 @@ If you find this work useful, please consider citing it.
 <pre><code>
 @inproceedings{Peng2022Balanced,
   title	= {Balanced Multimodal Learning via On-the-fly Gradient Modulation},
-  author={Peng, Xiaokang and Wei, Yake and Deng, Andong and Wang, Dong and Hu, Di},
+  author = {Peng, Xiaokang and Wei, Yake and Deng, Andong and Wang, Dong and Hu, Di},
   booktitle	= {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
   year	= {2022}
 }
