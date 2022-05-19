@@ -163,12 +163,11 @@ As shown in above picture, 'playing guitar' is a class that audio surpasses visu
 If you find this work useful, please consider citing it.
 
 <pre><code>
-@ARTICLE{Peng2022Balanced,
+@inproceedings{Peng2022Balanced,
   title	= {Balanced Multimodal Learning via On-the-fly Gradient Modulation},
-  author	= {Xiaokang Peng, Yake Wei, Andong Deng, Dong Wang, Di Hu},
-  journal	= {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year	= {2022},
-  Url	= {https://arxiv.org/abs/2203.15332}
+  author={Peng, Xiaokang and Wei, Yake and Deng, Andong and Wang, Dong and Hu, Di},
+  booktitle	= {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year	= {2022}
 }
 </code></pre>
 
