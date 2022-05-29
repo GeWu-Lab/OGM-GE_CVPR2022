@@ -8,7 +8,8 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 
 **Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022, Oral Presentation)**
 
-**[[arXiv](https://arxiv.org/abs/2203.15332)]**
+**[[arXiv](https://arxiv.org/abs/2203.15332)]** **[[Supplementary Material](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/OGM_Sup.pdf)]** 
+
 
 
 
@@ -162,12 +163,11 @@ As shown in above picture, 'playing guitar' is a class that audio surpasses visu
 If you find this work useful, please consider citing it.
 
 <pre><code>
-@ARTICLE{Peng2022Balanced,
+@inproceedings{Peng2022Balanced,
   title	= {Balanced Multimodal Learning via On-the-fly Gradient Modulation},
-  author	= {Xiaokang Peng, Yake Wei, Andong Deng, Dong Wang, Di Hu},
-  journal	= {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year	= {2022},
-  Url	= {https://arxiv.org/abs/2203.15332}
+  author = {Peng, Xiaokang and Wei, Yake and Deng, Andong and Wang, Dong and Hu, Di},
+  booktitle	= {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  year	= {2022}
 }
 </code></pre>
 

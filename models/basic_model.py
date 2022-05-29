@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from backbone import resnet18
-from fusion_modules import SumFusion, ConcatFusion, FiLM, GatedFusion
+from .backbone import resnet18
+from .fusion_modules import SumFusion, ConcatFusion, FiLM, GatedFusion
 
 
 class AVClassifier(nn.Module):

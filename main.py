@@ -125,7 +125,6 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
                 layer = str(name).split('.')[1]
 
                 if 'audio' in layer and len(parms.grad.size()) == 4:
-                    parms.grad *= coeff_a
                     if args.modulation == 'OGM_GE':
                         parms.grad = parms.grad * coeff_a + \
                                      torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
@@ -133,7 +132,6 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
                         parms.grad *= coeff_a
 
                 if 'visual' in layer and len(parms.grad.size()) == 4:
-                    parms.grad *= coeff_v
                     if args.modulation == 'OGM_GE':
                         parms.grad = parms.grad * coeff_v + \
                                      torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
