@@ -54,10 +54,11 @@ class BasicBlock(nn.Module):
 
 class ResNet(nn.Module):
 
-    def __init__(self, block, layers, num_classes=1000, pool='avgpool', zero_init_residual=False,
+    def __init__(self, block, layers, modality, num_classes=1000, pool='avgpool', zero_init_residual=False,
                  groups=1, width_per_group=64, replace_stride_with_dilation=None,
                  norm_layer=None):
         super(ResNet, self).__init__()
+        self.modality = modality
         self.pool = pool
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
@@ -74,8 +75,14 @@ class ResNet(nn.Module):
                              "or a 3-element tuple, got {}".format(replace_stride_with_dilation))
         self.groups = groups
         self.base_width = width_per_group
-        self.conv1 = nn.Conv2d(1, self.inplanes, kernel_size=7, stride=2, padding=3,
-                               bias=False)
+        if modality == 'audio':
+            self.conv1 = nn.Conv2d(1, self.inplanes, kernel_size=7, stride=2, padding=3,
+                                   bias=False)
+        elif modality == 'visual':
+            self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3,
+                                   bias=False)
+        else:
+            raise NotImplementedError('Incorrect modality, should be audio or visual but got {}'.format(modality))
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
@@ -133,6 +140,12 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
+
+        if self.modality == 'visual':
+            (B, C, T, H, W) = x.size()
+            x = x.permute(0, 2, 1, 3, 4).contiguous()
+            x = x.view(B * T, C, H, W)
+
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -143,14 +156,6 @@ class ResNet(nn.Module):
         x = self.layer3(x)
         x = self.layer4(x)
         out = x
-
-        # x = self.avgpool(x)
-        # x = x.reshape(x.size(0), -1)
-        #
-        # if self.pool == 'avgpool':
-        #     x = self.fc(x)
-        # elif self.pool == 'vlad':
-        #     x = self.fc_(x)
 
         return out
 
@@ -198,11 +203,11 @@ class Bottleneck(nn.Module):
         return out
 
 
-def _resnet(arch, block, layers, progress, **kwargs):
-    model = ResNet(block, layers, **kwargs)
+def _resnet(arch, block, layers, modality, progress, **kwargs):
+    model = ResNet(block, layers, modality, **kwargs)
     return model
 
 
-def resnet18(progress=True, **kwargs):
-    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], progress,
+def resnet18(modality, progress=True, **kwargs):
+    return _resnet('resnet18', BasicBlock, [2, 2, 2, 2], modality, progress,
                    **kwargs)

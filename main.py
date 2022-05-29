@@ -71,22 +71,22 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
         a, v, out = model(spec.unsqueeze(1).float(), image.float())
 
         if args.fusion_method == 'sum':
-            out_v = (torch.mm(v, torch.transpose(model.fusion_module.fc_y.weight, 0, 1)) +
-                     model.fusion_module.fc_y.bias / 2)
-            out_a = (torch.mm(a, torch.transpose(model.fusion_module.fc_x.weight, 0, 1)) +
-                     model.fusion_module.fc_x.bias / 2)
+            out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_y.weight, 0, 1)) +
+                     model.module.fusion_module.fc_y.bias / 2)
+            out_a = (torch.mm(a, torch.transpose(model.module.fusion_module.fc_x.weight, 0, 1)) +
+                     model.module.fusion_module.fc_x.bias / 2)
         else:
-            out_v = (torch.mm(v, torch.transpose(model.fusion_module.fc_out.weight[:, :512], 0, 1)) +
-                     model.fusion_module.fc_out.bias / 2)
-            out_a = (torch.mm(a, torch.transpose(model.fusion_module.fc_out.weight[:, 512:], 0, 1)) +
-                     model.fusion_module.fc_out.bias / 2)
+            out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_out.weight[:, 512:], 0, 1)) +
+                     model.module.fusion_module.fc_out.bias / 2)
+            out_a = (torch.mm(a, torch.transpose(model.module.fusion_module.fc_out.weight[:, :512], 0, 1)) +
+                     model.module.fusion_module.fc_out.bias / 2)
 
         loss = criterion(out, label)
         loss_v = criterion(out_v, label)
         loss_a = criterion(out_a, label)
         loss.backward()
 
-        if args.mudulation == 'Normal':
+        if args.modulation == 'Normal':
             # no modulation, regular optimization
             pass
         else:
@@ -104,8 +104,12 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
                     1,                         else
             coeff_u is k_t_u, where t means iteration steps and u is modality indicator, either a or v.
             """
-            coeff_v = 1 - tanh(args.alpha * relu(ratio_v - 1))
-            coeff_a = 1 - tanh(args.alpha * relu(ratio_a - 1))
+            if ratio_v > 1:
+                coeff_v = 1 - tanh(args.alpha * relu(ratio_v))
+                coeff_a = 1
+            else:
+                coeff_a = 1 - tanh(args.alpha * relu(ratio_a))
+                coeff_v = 1
 
             if args.use_tensorboard:
                 iteration = epoch * len(dataloader) + step
@@ -121,21 +125,26 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
                 layer = str(name).split('.')[1]
 
                 if 'audio' in layer and len(parms.grad.size()) == 4:
-                    parms.grad *= coeff_a
                     if args.modulation == 'OGM_GE':
-                        parms.grad += torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
+                        parms.grad = parms.grad * coeff_a + \
+                                     torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
+                    else:
+                        parms.grad *= coeff_a
 
                 if 'visual' in layer and len(parms.grad.size()) == 4:
-                    parms.grad *= coeff_v
                     if args.modulation == 'OGM_GE':
-                        parms.grad += torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
+                        parms.grad = parms.grad * coeff_v + \
+                                     torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
+                    else:
+                        parms.grad *= coeff_v
 
         optimizer.step()
-        scheduler.step()
 
         _loss += loss.item()
         _loss_a += loss_a.item()
         _loss_v += loss_v.item()
+
+    scheduler.step()
 
     return _loss / len(dataloader), _loss_a / len(dataloader), _loss_v / len(dataloader)
 
@@ -171,15 +180,15 @@ def valid(args, model, device, dataloader):
             a, v, out = model(spec.unsqueeze(1).float(), image.float(), label, -1)
 
             if args.fusion_method == 'sum':
-                out_v = (torch.mm(v, torch.transpose(model.fusion_module.fc_y.weight, 0, 1)) +
-                         model.fusion_module.fc_y.bias / 2)
-                out_a = (torch.mm(a, torch.transpose(model.fusion_module.fc_x.weight, 0, 1)) +
-                         model.fusion_module.fc_x.bias / 2)
+                out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_y.weight, 0, 1)) +
+                         model.module.fusion_module.fc_y.bias / 2)
+                out_a = (torch.mm(a, torch.transpose(model.module.fusion_module.fc_x.weight, 0, 1)) +
+                         model.module.fusion_module.fc_x.bias / 2)
             else:
-                out_v = (torch.mm(v, torch.transpose(model.fusion_module.fc_out.weight[:, :512], 0, 1)) +
-                         model.fusion_module.fc_out.bias / 2)
-                out_a = (torch.mm(a, torch.transpose(model.fusion_module.fc_out.weight[:, 512:], 0, 1)) +
-                         model.fusion_module.fc_out.bias / 2)
+                out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_out.weight[:, 512:], 0, 1)) +
+                         model.module.fusion_module.fc_out.bias / 2)
+                out_a = (torch.mm(a, torch.transpose(model.module.fusion_module.fc_out.weight[:, :512], 0, 1)) +
+                         model.module.fusion_module.fc_out.bias / 2)
 
             prediction = softmax(out)
             pred_v = softmax(out_v)
@@ -290,8 +299,8 @@ def main():
                                                           args.modulation,
                                                           args.alpha,
                                                           args.optimizer,
-                                                          args.modulate_starts,
-                                                          args.modulate_ends,
+                                                          args.modulation_starts,
+                                                          args.modulation_ends,
                                                           epoch, acc)
 
                 saved_dict = {'saved_epoch': epoch,
@@ -307,9 +316,9 @@ def main():
 
                 torch.save(saved_dict, save_dir)
                 print('The best model has been saved at {}.'.format(save_dir))
-                print("Loss: {.2f}, Acc: {.2f}".format(batch_loss, acc))
+                print("Loss: {:.2f}, Acc: {:.2f}".format(batch_loss, acc))
             else:
-                print("Loss: {.2f}, Acc: {.2f}, Best Acc: {.2f}".format(batch_loss, acc, best_acc))
+                print("Loss: {:.2f}, Acc: {:.2f}, Best Acc: {:.2f}".format(batch_loss, acc, best_acc))
 
     else:
         # first load trained model

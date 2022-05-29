@@ -11,7 +11,7 @@ from scipy import signal
 def audio_extract(path, audio_name, audio_path, sr=16000):
     save_path = path
     samples, samplerate = librosa.load(audio_path)
-    resamples = np.tile(samples, 10)[:sr]
+    resamples = np.tile(samples, 10)[:160000]
     resamples[resamples > 1.] = 1.
     resamples[resamples < -1.] = -1.
     frequencies, times, spectrogram = signal.spectrogram(resamples, samplerate, nperseg=512, noverlap=353)

@@ -8,7 +8,8 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 
 **Accepted by: IEEE Conference on Computer Vision and Pattern Recognition(CVPR 2022, Oral Presentation)**
 
-**[[arXiv](https://arxiv.org/abs/2203.15332)]**
+**[[arXiv](https://arxiv.org/abs/2203.15332)]** **[[Supplementary Material](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/OGM_Sup.pdf)]** 
+
 
 
 
@@ -136,7 +137,7 @@ You can test the performance of trained model by simply running
 
 ### Classification
 
-CREMA-D: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/CREMAD_normal.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/CREMAD_balance_noise_0326.pth)
+CREMA-D: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/best_model_of_dataset_CREMAD_Normal_alpha_0.0_optimizer_sgd_modulate_starts_0_ends_50.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/best_model_of_dataset_CREMAD_OGM_GE_alpha_0.9_optimizer_sgd_modulate_starts_0_ends_50.pth)
 
 AVE: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_concat.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_60_noise_0.3.pth)
 
@@ -158,16 +159,15 @@ As shown in above picture, 'playing guitar' is a class that audio surpasses visu
 
 
 
-## Citations
+## Citation
 If you find this work useful, please consider citing it.
 
 <pre><code>
-@ARTICLE{Peng2022Balanced,
+@inproceedings{Peng2022Balanced,
   title	= {Balanced Multimodal Learning via On-the-fly Gradient Modulation},
-  author	= {Xiaokang Peng, Yake Wei, Andong Deng, Dong Wang, Di Hu},
-  journal	= {IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year	= {2022},
-  Url	= {}
+  author = {Peng, Xiaokang and Wei, Yake and Deng, Andong and Wang, Dong and Hu, Di},
+  booktitle	= {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  year	= {2022}
 }
 </code></pre>
 
