@@ -76,10 +76,11 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
             out_a = (torch.mm(a, torch.transpose(model.module.fusion_module.fc_x.weight, 0, 1)) +
                      model.module.fusion_module.fc_x.bias / 2)
         else:
-            out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_out.weight[:, 512:], 0, 1)) +
-                     model.module.fusion_module.fc_out.bias / 2)
-            out_a = (torch.mm(a, torch.transpose(model.module.fusion_module.fc_out.weight[:, :512], 0, 1)) +
-                     model.module.fusion_module.fc_out.bias / 2)
+            weight_size = model.module.fusion_module.fc_out.weight.size(1)
+            out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_out.weight[:, weight_size // 2:], 0, 1))
+                     + model.module.fusion_module.fc_out.bias / 2)
+            out_a = (torch.mm(a, torch.transpose(model.module.fusion_module.fc_out.weight[:, :weight_size // 2], 0, 1))
+                     + model.module.fusion_module.fc_out.bias / 2)
 
         loss = criterion(out, label)
         loss_v = criterion(out_v, label)
