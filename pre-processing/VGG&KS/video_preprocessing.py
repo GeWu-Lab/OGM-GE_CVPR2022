@@ -48,14 +48,14 @@ class videoReader(object):
 
 
 class VGGSound_dataset(object):
-    def __init__(self, path_to_dataset = '/data/users/xiaokang_peng/VGGsound/', frame_interval=1, frame_kept_per_second=1):
+    def __init__(self, path_to_dataset = '/data/users/user/VGGsound/', frame_interval=1, frame_kept_per_second=1):
         self.path_to_video = os.path.join(path_to_dataset, 'test-videos/test-set/')
         self.frame_kept_per_second = frame_kept_per_second
         self.path_to_save = os.path.join(path_to_dataset, 'test-videos/test-set-img/', 'Image-{:02d}-FPS'.format(self.frame_kept_per_second))
         if not os.path.exists(self.path_to_save):
             os.mkdir(self.path_to_save)
 
-        videos = '/data/users/xiaokang_peng/VGGsound/test-videos/test_video_list.txt'
+        videos = '/data/users/user/VGGsound/test-videos/test_video_list.txt'
         with open(videos, 'r') as f:
             self.file_list = f.readlines()
 
