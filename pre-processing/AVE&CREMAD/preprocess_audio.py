@@ -15,12 +15,12 @@ def get_arguments():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--video_input',
-        default='/home/xiaokang_peng/data/AVE/video',
+        default='/home/user/data/AVE/video',
         type=str,
         help='Input directory path of videos or audios')
     parser.add_argument(
         '--audio_output',
-        default='/home/xiaokang_peng/data/AVE_av/audio/',
+        default='/home/user/data/AVE_av/audio/',
         type=str,
         help='Output directory path of videos')
     return parser.parse_args() 
