@@ -72,6 +72,7 @@ AVE
 │---------sample2.wav
 
 ```
+The processed dir structures may be different from each other for these datasets, depending on the raw data structure and personal habit. More details and processing code can be seen in the dir /pre-processing.
 
 &nbsp;
 
