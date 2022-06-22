@@ -33,5 +33,5 @@ AVE/CREMA-D
 ```
 
 (To be noticed that .flv files can be processed similarly like mp4 files using VideoFileClip.)
-
+The code to process frames we provide is able to deal structure divided by classes, you can also ignore that by add a new middle level dir. 
 
