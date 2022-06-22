@@ -233,8 +233,8 @@ def deal_dir(dir_path, dst_path, pool=None):
 logger = log_config()
 
 if __name__ == '__main__':
-    dir_path = '/home/data/kinetics400/train-videos'
-    dst_dir_path = '/home/data/kinetics400/train-frames-1fps'
+    dir_path = '/home/data/AVE'
+    dst_dir_path = '/home/data/AVE/train-frames-1fps'
     # dir_path = '../ks-val-videos'
     # dst_dir_path = '../ks-val-frame-1fps/'
 
