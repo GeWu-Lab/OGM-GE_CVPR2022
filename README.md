@@ -48,40 +48,35 @@ Download Original Dataset：
 [comment]: <> ([ESC50]&#40;https://github.com/karoldvl/ESC-50/archive/master.zip&#41;.)
 
 
-
 ### Pre-processing
 
-For example, we provide code to pre-process videos into RGB frames and audio wav files in directory  ```pre-process/```. The pre-processed data can be obtained by running:
+For CREMA-D and VGGSound dataset, we provide code to pre-process videos into RGB frames and audio wav files in the directory ```data/```.
 
-```python pre-processing/obtain_audio_spectrogram.py``` 
+#### CREMA-D 
 
-and 
+As the original CREMA-D dataset has provided the original audio and video files, we simply extract the video frames by running the code:
 
-```python pre-processing/obtain_frames.py```. 
+```python data/CREMAD/video_preprecessing.py```
 
+Note that, the relevant path/dir should be changed according your own env.  
 
-After downloading and processing data, you should build the data directory following proper structure. Take AVE for example:
-```
-AVE
-│------ visual
-│---------sample1
-│------------frame1
-│------------frame2
-│------ audio
-│---------sample1.wav
-│---------sample2.wav
+#### VGGSound
 
-```
-The processed dir structures may be different from each other for these datasets, depending on the raw data structure and personal habit. More details and processing code can be seen in the dir /pre-processing.
+As the original VGGSound dataset only provide the raw video files, we have to extract the audio by running the code:
 
-&nbsp;
+```python data/VGGSound/mp4_to_wav.py```
+
+Then, extracting the video frames:
+
+```python data/VGGSound/video_preprecessing.py```
+
+Note that, the relevant path/dir should be changed according your own env. 
+
 
 ## Core code demo
 
-Our proposed OGM-GE can work as a simple but useful plugin for some widely used multimodal fusion frameworks. We dispaly the core code part as following:
+Our proposed OGM-GE can work as a simple but useful plugin for some widely used multimodal fusion frameworks. We dispaly the core abstract code part as following:
 ```python
-import torch
-
     ---in training step---
     
     # Out_a, out_v are calculated to estimate the performance of 'a' and 'v' modality.
@@ -105,18 +100,9 @@ import torch
     ---continue for next training step---
 ```
 
-## Train the model
-
-The difference between ```main.py``` and ```main_old.py``` is as follows:
-
-In ```main.py```,  we consider adaptive imbalance during the whole optimization according to the Eq.10 in our paper.
-
-In ```main_old.py```, the auditory modality is viewed as dominant by default.
-
-
 ### default modulation setting: 
 
-```--modulation OGM_GE --modulation_starts 0 --modulation_ends 50 --fusion_method concat --alpha 0.5```
+```--modulation OGM_GE --modulation_starts 0 --modulation_ends 50 --fusion_method concat --alpha 0.1```
 
 You can train your model simply by running:
 
@@ -133,6 +119,11 @@ You can also adapt to your own setting by adding additional arguments, for examp
 You can test the performance of trained model by simply running
 
 ```python main.py --ckpt_path /PATH-to-trained-ckpt ```
+
+## Tips
+
+There is a hype-parameter within OGM-GE, which is the alpha that depends on the modality discrepancy on different dataset. 
+Here we recommend alpha=0.1 for VGGSound and alpha=0.8 for CREMA-D.
 
 ## Checkpoints
 

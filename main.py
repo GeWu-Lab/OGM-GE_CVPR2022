@@ -7,7 +7,10 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
+import pdb
 
+from dataset.CramedDataset import CramedDataset
+from dataset.VGGSoundDataset import VGGSound
 from dataset.dataset import AVDataset
 from models.basic_model import AVClassifier
 from utils.utils import setup_seed, weight_init
@@ -15,12 +18,17 @@ from utils.utils import setup_seed, weight_init
 
 def get_arguments():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset', required=True, type=str,
+    parser.add_argument('--dataset', default='CREMAD', type=str,
                         help='VGGSound, KineticSound, CREMAD, AVE')
     parser.add_argument('--modulation', default='OGM_GE', type=str,
+
                         choices=['Normal', 'OGM', 'OGM_GE'])
     parser.add_argument('--fusion_method', default='concat', type=str,
                         choices=['sum', 'concat', 'gated', 'film'])
+    parser.add_argument('--fps', default=1, type=int)
+    parser.add_argument('--use_video_frames', default=3, type=int)
+    parser.add_argument('--audio_path', default='/home/hudi/data/CREMA-D/AudioWAV', type=str)
+    parser.add_argument('--visual_path', default='/home/hudi/data/CREMA-D/', type=str)
 
     parser.add_argument('--batch_size', default=64, type=int)
     parser.add_argument('--epochs', default=100, type=int)
@@ -38,7 +46,7 @@ def get_arguments():
     parser.add_argument('--train', action='store_true', help='turn on train mode')
 
     parser.add_argument('--use_tensorboard', default=False, type=bool, help='whether to visualize')
-    parser.add_argument('--tensorboard_path', required=True, type=str, help='path to save tensorboard logs')
+    parser.add_argument('--tensorboard_path', type=str, help='path to save tensorboard logs')
 
     parser.add_argument('--random_seed', default=0, type=int)
     parser.add_argument('--gpu_ids', default='0, 1', type=str, help='GPU ids')
@@ -59,8 +67,9 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
     _loss_a = 0
     _loss_v = 0
 
-    for step, (spec, image, label, name) in enumerate(dataloader):
+    for step, (spec, image, label) in enumerate(dataloader):
 
+        #pdb.set_trace()
         spec = spec.to(device)
         image = image.to(device)
         label = label.to(device)
@@ -79,6 +88,7 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
             weight_size = model.module.fusion_module.fc_out.weight.size(1)
             out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_out.weight[:, weight_size // 2:], 0, 1))
                      + model.module.fusion_module.fc_out.bias / 2)
+
             out_a = (torch.mm(a, torch.transpose(model.module.fusion_module.fc_out.weight[:, :weight_size // 2], 0, 1))
                      + model.module.fusion_module.fc_out.bias / 2)
 
@@ -105,6 +115,7 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
                     1,                         else
             coeff_u is k_t_u, where t means iteration steps and u is modality indicator, either a or v.
             """
+
             if ratio_v > 1:
                 coeff_v = 1 - tanh(args.alpha * relu(ratio_v))
                 coeff_a = 1
@@ -118,26 +129,26 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
                 writer.add_scalar('data/coefficient v', coeff_v, iteration)
                 writer.add_scalar('data/coefficient a', coeff_a, iteration)
 
-            if args.modulation_starts >= epoch >= args.modulation_ends:
-                coeff_v = 1
-                coeff_a = 1
+            if args.modulation_starts <= epoch <= args.modulation_ends: # bug fixed
+                for name, parms in model.named_parameters():
+                    layer = str(name).split('.')[1]
 
-            for name, parms in model.named_parameters():
-                layer = str(name).split('.')[1]
+                    if 'audio' in layer and len(parms.grad.size()) == 4:
+                        if args.modulation == 'OGM_GE':  # bug fixed
+                            parms.grad = parms.grad * coeff_a + \
+                                         torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
+                        elif args.modulation == 'OGM':
+                            parms.grad *= coeff_a
 
-                if 'audio' in layer and len(parms.grad.size()) == 4:
-                    if args.modulation == 'OGM_GE':
-                        parms.grad = parms.grad * coeff_a + \
-                                     torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
-                    else:
-                        parms.grad *= coeff_a
+                    if 'visual' in layer and len(parms.grad.size()) == 4:
+                        if args.modulation == 'OGM_GE':  # bug fixed
+                            parms.grad = parms.grad * coeff_v + \
+                                         torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
+                        elif args.modulation == 'OGM':
+                            parms.grad *= coeff_v
+            else:
+                pass
 
-                if 'visual' in layer and len(parms.grad.size()) == 4:
-                    if args.modulation == 'OGM_GE':
-                        parms.grad = parms.grad * coeff_v + \
-                                     torch.zeros_like(parms.grad).normal_(0, parms.grad.std().item() + 1e-8)
-                    else:
-                        parms.grad *= coeff_v
 
         optimizer.step()
 
@@ -172,13 +183,13 @@ def valid(args, model, device, dataloader):
         acc_a = [0.0 for _ in range(n_classes)]
         acc_v = [0.0 for _ in range(n_classes)]
 
-        for step, (spec, image, label, name) in enumerate(dataloader):
+        for step, (spec, image, label) in enumerate(dataloader):
 
             spec = spec.to(device)
             image = image.to(device)
             label = label.to(device)
 
-            a, v, out = model(spec.unsqueeze(1).float(), image.float(), label, -1)
+            a, v, out = model(spec.unsqueeze(1).float(), image.float())
 
             if args.fusion_method == 'sum':
                 out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_y.weight, 0, 1)) +
@@ -195,17 +206,19 @@ def valid(args, model, device, dataloader):
             pred_v = softmax(out_v)
             pred_a = softmax(out_a)
 
-            for i, item in enumerate(name):
+            for i in range(image.shape[0]):
 
-                ma = np.max(prediction[i].cpu().data.numpy())
-                v = np.max(pred_v[i].cpu().data.numpy())
-                a = np.max(pred_a[i].cpu().data.numpy())
+                ma = np.argmax(prediction[i].cpu().data.numpy())
+                v = np.argmax(pred_v[i].cpu().data.numpy())
+                a = np.argmax(pred_a[i].cpu().data.numpy())
                 num[label[i]] += 1.0
-                if abs(prediction[i].cpu().data.numpy()[label[i]] - ma) <= 0.0001:
+
+                #pdb.set_trace()
+                if np.asarray(label[i].cpu()) == ma:
                     acc[label[i]] += 1.0
-                if abs(out_v[i].cpu().data.numpy()[label[i]] - v) <= 0.0001:
+                if np.asarray(label[i].cpu()) == v:
                     acc_v[label[i]] += 1.0
-                if abs(out_a[i].cpu().data.numpy()[label[i]] - a) <= 0.0001:
+                if np.asarray(label[i].cpu()) == a:
                     acc_a[label[i]] += 1.0
 
     return sum(acc) / sum(num), sum(acc_a) / sum(num), sum(acc_v) / sum(num)
@@ -234,14 +247,14 @@ def main():
     scheduler = optim.lr_scheduler.StepLR(optimizer, args.lr_decay_step, args.lr_decay_ratio)
 
     if args.dataset == 'VGGSound':
-        train_dataset = AVDataset(args, mode='train')
-        test_dataset = AVDataset(args, mode='test')
+        train_dataset = VGGSound(args, mode='train')
+        test_dataset = VGGSound(args, mode='test')
     elif args.dataset == 'KineticSound':
         train_dataset = AVDataset(args, mode='train')
         test_dataset = AVDataset(args, mode='test')
     elif args.dataset == 'CREMAD':
-        train_dataset = AVDataset(args, mode='train')
-        test_dataset = AVDataset(args, mode='test')
+        train_dataset = CramedDataset(args, mode='train')
+        test_dataset = CramedDataset(args, mode='test')
     elif args.dataset == 'AVE':
         train_dataset = AVDataset(args, mode='train')
         test_dataset = AVDataset(args, mode='test')
@@ -272,7 +285,7 @@ def main():
                 writer = SummaryWriter(os.path.join(writer_path, log_name))
 
                 batch_loss, batch_loss_a, batch_loss_v = train_epoch(args, epoch, model, device,
-                                                                     train_dataloader, optimizer, scheduler, writer)
+                                                                     train_dataloader, optimizer, scheduler)
                 acc, acc_a, acc_v = valid(args, model, device, test_dataloader)
 
                 writer.add_scalars('Loss', {'Total Loss': batch_loss,
@@ -317,9 +330,11 @@ def main():
 
                 torch.save(saved_dict, save_dir)
                 print('The best model has been saved at {}.'.format(save_dir))
-                print("Loss: {:.2f}, Acc: {:.2f}".format(batch_loss, acc))
+                print("Loss: {:.3f}, Acc: {:.3f}".format(batch_loss, acc))
+                print("Audio Acc: {:.3f}， Visual Acc: {:.3f} ".format(acc_a, acc_v))
             else:
-                print("Loss: {:.2f}, Acc: {:.2f}, Best Acc: {:.2f}".format(batch_loss, acc, best_acc))
+                print("Loss: {:.3f}, Acc: {:.3f}, Best Acc: {:.3f}".format(batch_loss, acc, best_acc))
+                print("Audio Acc: {:.3f}， Visual Acc: {:.3f} ".format(acc_a, acc_v))
 
     else:
         # first load trained model
@@ -335,7 +350,7 @@ def main():
         assert modulation == args.modulation, 'inconsistency between modulation method of loaded model and args !'
         assert fusion == args.fusion_method, 'inconsistency between fusion method of loaded model and args !'
 
-        model.load_state_dict(state_dict)
+        model = model.load_state_dict(state_dict)
         print('Trained model loaded!')
 
         acc, acc_a, acc_v = valid(args, model, device, test_dataloader)
