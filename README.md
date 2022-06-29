@@ -127,17 +127,7 @@ Here we recommend alpha=0.1 for VGGSound and alpha=0.8 for CREMA-D.
 
 ## Checkpoints
 
-### Classification
-
-CREMA-D: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/best_model_of_dataset_CREMAD_Normal_alpha_0.0_optimizer_sgd_modulate_starts_0_ends_50.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/best_model_of_dataset_CREMAD_OGM_GE_alpha_0.9_optimizer_sgd_modulate_starts_0_ends_50.pth)
-
-AVE: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_concat.pth), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_60_noise_0.3.pth)
-
-KineticSound and VGGSound: Coming Soon
-
-### Event Localization
-
-AVE: [normal](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_L_normal.pt), [modulated](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/tree/main/ckpt/AVE_L_noise.pt)
+[CREMA-D](https://zenodo.org/record/6778788)
 
 
 ## Demo explanation
