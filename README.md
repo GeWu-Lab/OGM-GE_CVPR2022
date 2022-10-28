@@ -14,11 +14,12 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 
 ## News
 The effectiveness of the OGM-GE method has been corroborated by the work of several other researchers.
-| Task               | Dataset      | w/o  | w/   | Title                                                                                                         |   |   |   |   |   |
-|--------------------|--------------|------|------|---------------------------------------------------------------------------------------------------------------|---|---|---|---|---|
-| Action Recognition | UCF101       | 82.3 | 84.0 | [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC) |   |   |   |   |   |
-| Action Recognition | Kinetics-400 | 74.3 | 74.5 | [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC) |   |   |   |   |   |
-| Event Recognition  | VGGSound     | 49.5 | 50.6 | [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC) |   |   |   |   |   |
+| Task               | Dataset      | w/o  | w/   | Title                                                                                                         |
+|--------------------|--------------|------|------|---------------------------------------------------------------------------------------------------------------|
+| Action Recognition | UCF101       | 82.3 | 84.0 | [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC) |
+| Action Recognition | Kinetics-400 | 74.3 | 74.5 | [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC) |
+| Event Recognition  | VGGSound     | 49.5 | 50.6 | [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC) |
+
 
 
 
