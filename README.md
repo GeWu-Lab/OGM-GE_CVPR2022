@@ -1,10 +1,5 @@
 # Official OGM-GE in PyTorch
 
-## News
-The effectiveness of the OGM-GE method has been corroborated by the work of several other researchers:
-- [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC)
-
----
 
 Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Multimodal Learning via On-the-fly Gradient Modulation*'', which is a flexible plug-in module to enhance the optimization process of multimodal learning. Please refer to our [CVPR 2022 paper](https://arxiv.org/abs/2203.15332) for more details.
 
@@ -17,6 +12,9 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 **[[arXiv](https://arxiv.org/abs/2203.15332)]** **[[Supplementary Material](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/OGM_Sup.pdf)]** 
 
 
+## News
+The effectiveness of the OGM-GE method has been corroborated by the work of several other researchers:
+- [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC)
 
 
 
