@@ -14,10 +14,11 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 
 ## News
 The effectiveness of the OGM-GE method has been corroborated by the work of several other researchers.
-| Task               | Dataset      | w/o OGM-GE | w/ OGM-GE  | Source                                                                                                         |
-|--------------------|--------------|------|------|---------------------------------------------------------------------------------------------------------------|
-| Action Recognition | UCF101       | 82.3 | 84.0 | [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC) |
+| Task               | Dataset     |Modalities | w/o OGM-GE | w/ OGM-GE  | Source                                                                                                         |
+|--------------------|--------------|--------------|------|------|------|
+| Action Recognition | UCF101       |RGB, Optical-Flow | 82.3 | 84.0 | [1] |
 
+[1] [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC)
 
 
 
