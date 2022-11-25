@@ -20,6 +20,7 @@ The effectiveness of the OGM-GE method has been corroborated by the work of seve
 | Digit Classification | [CG-MNIST](https://openaccess.thecvf.com/content_CVPR_2019/papers/Kim_Learning_Not_to_Learn_Training_Deep_Neural_Networks_With_Biased_CVPR_2019_paper.pdf) | Color, Gray | 58.4 | 77.2 |  [2]  |
 
 [1] [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC)
+
 [2] [PMR: Prototypical Modal Rebalance for Multimodal Learning](https://arxiv.org/pdf/2211.07089.pdf)
 
 
