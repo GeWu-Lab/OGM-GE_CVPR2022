@@ -20,6 +20,7 @@ The effectiveness of the OGM-GE method has been corroborated by the work of seve
 | Knowledge Graph Link Prediction |  OpenBG-Complete-IMG+   |Image, OCR | 59.4 | 60.1 | [2] |
 
 [1] [On Uni-modal Feature Learning In Supervised Multi-modal Learning](https://openreview.net/pdf?id=mb7VM83DkyC)
+
 [2] [IMKGA-SM: Interpretable Multimodal Knowledge Graph Answer Prediction via Sequence Modeling](https://arxiv.org/pdf/2301.02445.pdf)
 
 
