@@ -14,7 +14,7 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 
 ## News
 The effectiveness of the OGM-GE method has been corroborated by the work of several other researchers.
-| Task               | Dataset     |Modalities | w/o OGM-GE | w/ OGM-GE  | Source                                                                                                         |
+| Task               | Dataset     |Modalities | w/o OGM-GE | w/ OGM-GE or similar | Source                                                                                                         |
 |--------------------|--------------|--------------|------|------|------|
 | Action Recognition | UCF101       |RGB, Optical-Flow | 82.3 | 84.0 | [1] |
 | Knowledge Graph Link Prediction |  OpenBG-Complete-IMG+   |Image, OCR | 59.4 | 60.1 | [2] |
