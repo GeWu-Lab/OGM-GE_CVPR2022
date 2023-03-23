@@ -81,9 +81,9 @@ def train_epoch(args, epoch, model, device, dataloader, optimizer, scheduler, wr
 
         if args.fusion_method == 'sum':
             out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_y.weight, 0, 1)) +
-                     model.module.fusion_module.fc_y.bias / 2)
+                     model.module.fusion_module.fc_y.bias)
             out_a = (torch.mm(a, torch.transpose(model.module.fusion_module.fc_x.weight, 0, 1)) +
-                     model.module.fusion_module.fc_x.bias / 2)
+                     model.module.fusion_module.fc_x.bias)
         else:
             weight_size = model.module.fusion_module.fc_out.weight.size(1)
             out_v = (torch.mm(v, torch.transpose(model.module.fusion_module.fc_out.weight[:, weight_size // 2:], 0, 1))
