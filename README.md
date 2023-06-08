@@ -13,8 +13,8 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 
 
 ## News
-- We release a balanced audiovisual dataset for imbalance mult-modal learning analysis! [Paper](https://arxiv.org/abs/2302.10912)
-- We further develop imbalance-mitigating method, MMCosine, for audio-visual fine-grained tasks! The [paper](https://arxiv.org/abs/2303.05338) has been accepted by ICASSP2023.
+- We release a balanced audiovisual dataset for imbalance mult-modal learning analysis! [Project Page](https://gewu-lab.github.io/Balanced-Audiovisual-Dataset/) [Paper](https://arxiv.org/abs/2302.10912)
+- We further develop imbalance-mitigating method, MMCosine, for audio-visual fine-grained tasks! The [paper](https://arxiv.org/abs/2303.05338) has been accepted by ICASSP2023. [Project Page](https://gewu-lab.github.io/MMCosine/)
 - The effectiveness of the OGM-GE method has been corroborated by the work of several other researchers.
 
 | Task               | Dataset     |Modalities | w/o OGM-GE | w/ OGM-GE or similar | Source                                                                                                         |
