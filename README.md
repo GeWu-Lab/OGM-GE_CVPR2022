@@ -30,7 +30,11 @@ Here is the official PyTorch implementation of OGM-GE proposed in ''*Balanced Mu
 
 [PMR: Prototypical Modal Rebalance for Multimodal Learning](https://openaccess.thecvf.com/content/CVPR2023/papers/Fan_PMR_Prototypical_Modal_Rebalance_for_Multimodal_Learning_CVPR_2023_paper.pdf) CVPR 2023.
 
+[Graph Interactive Network with Adaptive Gradient for Multi-Modal Rumor Detection](https://dl.acm.org/doi/abs/10.1145/3591106.3592250) ICMR 2023.
+
 [MMCosine: Multi-Modal Cosine Loss Towards Balanced Audio-Visual Fine-Grained Learning](https://arxiv.org/pdf/2303.05338.pdf) ICASSP 2023.
+
+[Make Acoustic and Visual Cues Matter: CH-SIMS v2.0 Dataset and AV-Mixup Consistent Module](https://dl.acm.org/doi/pdf/10.1145/3536221.3556630) ICMI 2022.
 
 ## What is the imbalance phenomenon in multimodal learning task?
 We observe that **the potential of multimodal information is not fully exploited even when the multimodal model outperforms its uni-modal counterpart.** We conduct linear probing experiments to explore the quality of jointly trained encoders, and find them under-optimized (the yellow line) compared with the uni-modal model (the red line). We proposed the OGM-GE method to improve the optimization process adaptively and achieved consistent improvement (the blue line). We improve both the multimodal performance and uni-model representation as shown in the following figure.
