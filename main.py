@@ -350,7 +350,7 @@ def main():
         assert modulation == args.modulation, 'inconsistency between modulation method of loaded model and args !'
         assert fusion == args.fusion_method, 'inconsistency between fusion method of loaded model and args !'
 
-        model = model.load_state_dict(state_dict)
+        model.load_state_dict(state_dict)
         print('Trained model loaded!')
 
         acc, acc_a, acc_v = valid(args, model, device, test_dataloader)
