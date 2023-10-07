@@ -132,7 +132,7 @@ You can train your model simply by running:
 
 You can also adapt to your own setting by adding additional arguments, for example, if you want to train our model on CREMA-D dataset, with gated fusion method and only OGM (i.e., without GE), and try to modulate the gradient from epoch 20 to epoch 80, you can run the following command: 
 
-```python main.py --train --dataset CREMAD  --fusion_method gated --modulation OGM --modulation_starts 20 --modulation_ends 80 --alpha 0.3```.
+```train.py --train --dataset CREMAD  --fusion_method gated --modulation OGM --modulation_starts 20 --modulation_ends 80 --alpha 0.3```.
 
 
 
