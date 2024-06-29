@@ -94,6 +94,9 @@ Then, extracting the video frames:
 
 Note that, the relevant path/dir should be changed according your own env. 
 
+#### process of wav file
+[Here](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/data/KineticSound/process_audio.py) we provide one of the process method of wav file.
+
 
 ## Core code demo
 
