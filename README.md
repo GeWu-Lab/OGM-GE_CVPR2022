@@ -73,7 +73,7 @@ Download Original Dataset：
 ### Pre-processing
 
 For CREMA-D and VGGSound dataset, we provide code to pre-process videos into RGB frames and audio wav files in the directory ```data/```.
-[Here](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/data/KineticSound/process_audio.py) we provide one of the pre-processing methods of wav file.
+**[Here](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/data/KineticSound/process_audio.py) we provide one of the pre-processing methods of wav file.**
 
 #### CREMA-D 
 
