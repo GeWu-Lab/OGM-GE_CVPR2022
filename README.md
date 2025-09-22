@@ -71,30 +71,24 @@ Download Original Dataset：
 
 
 ### Pre-processing
+**For all video datasets, we take a similar pre-processing strategy:**
+- **For audio**, convert the MP4/MP3 format to WAV format and extract the spectrogram. See [this script](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/data/KineticSound/process_audio.py) for an example.
+- **For visual**, get frames at 1 fps.
 
-For CREMA-D and VGGSound dataset, we provide code to pre-process videos into RGB frames and audio wav files in the directory ```data/```.
 
-**[!!Attention]:For audio modality, we convert the WAV files into spectrogram. [Here](https://github.com/GeWu-Lab/OGM-GE_CVPR2022/blob/main/data/KineticSound/process_audio.py) we provide one of the pre-processing methods of wav file.**
+Next are some other scripts that may be useful:
 
-#### CREMA-D 
+1. For the CREMA-D dataset, we extract the video frames by running the code:
 
-As the original CREMA-D dataset has provided the original audio and video files, we simply extract the video frames by running the code:
+```python data/CREMAD/video_preprecessing.py``` 
 
-```python data/CREMAD/video_preprecessing.py```
-
-Note that, the relevant path/dir should be changed according your own env.  
-
-#### VGGSound
-
-As the original VGGSound dataset only provide the raw video files, we have to extract the audio by running the code:
+2. For the VGGSound dataset, we extract the wav file by running the code:
 
 ```python data/VGGSound/mp4_to_wav.py```
 
-Then, extracting the video frames:
+3. For the VGGSound dataset, we extract the video frames by running the code:
 
 ```python data/VGGSound/video_preprecessing.py```
-
-Note that, the relevant path/dir should be changed according your own env. 
 
 
 
